@@ -1,0 +1,229 @@
+{
+  "figure_id": "V16",
+  "title": "Subgroup performance forest",
+  "question": "Are gains consistent across class, annotation support and missingness?",
+  "data_hashes": {
+    "protocol_lock": "b89876787fce3fa6",
+    "strata": "6563dae483c53938",
+    "bootstrap_primary": "512b61f782dc88ce"
+  },
+  "run_ids": [
+    "final_P_s101",
+    "final_P_s202",
+    "final_P_s303",
+    "final_B3_s101",
+    "final_B3_s202",
+    "final_B3_s303"
+  ],
+  "split": "test",
+  "n_rows": 21305,
+  "n_patients": null,
+  "n_components": 391,
+  "generation_code_commit": null,
+  "parameters": {
+    "strata": {
+      "__overall__": {
+        "delta": 0.06566447534470776,
+        "ci_low": 0.033439957683243995,
+        "ci_high": 0.09730142284235661,
+        "n_groups": 391,
+        "n_rows": null,
+        "status": "PASS",
+        "low_support": false
+      },
+      "votes_1": {
+        "delta": 0.12276231591286446,
+        "ci_low": -0.03206279701614347,
+        "ci_high": 0.28907747940458867,
+        "n_rows": 510,
+        "n_groups": 28,
+        "kl_candidate": 0.9394119843238691,
+        "kl_comparator": 0.8166496684110046,
+        "status": "PASS",
+        "low_support": true
+      },
+      "votes_2-4": {
+        "delta": 0.05677806856289336,
+        "ci_low": 0.012485266896615355,
+        "ci_high": 0.09863573011368389,
+        "n_rows": 11990,
+        "n_groups": 353,
+        "kl_candidate": 1.0571544364342589,
+        "kl_comparator": 1.0003763678713655,
+        "status": "PASS",
+        "low_support": false
+      },
+      "votes_5-9": {
+        "delta": 0.017512710419819444,
+        "ci_low": -0.04273676082991667,
+        "ci_high": 0.07365443266429332,
+        "n_rows": 315,
+        "n_groups": 56,
+        "kl_candidate": 0.4909644198093525,
+        "kl_comparator": 0.47345170938953307,
+        "status": "PASS",
+        "low_support": false
+      },
+      "votes_10+": {
+        "delta": 0.07882106417934409,
+        "ci_low": 0.02712755555887966,
+        "ci_high": 0.12885920732395295,
+        "n_rows": 8490,
+        "n_groups": 239,
+        "kl_candidate": 0.7444285497393933,
+        "kl_comparator": 0.6656074855600494,
+        "status": "PASS",
+        "low_support": false
+      },
+      "entropy_low": {
+        "delta": 0.0727479804381832,
+        "ci_low": 0.028320254271715795,
+        "ci_high": 0.11547553777558726,
+        "n_rows": 10877,
+        "n_groups": 357,
+        "kl_candidate": 1.045643375154763,
+        "kl_comparator": 0.9728953947165799,
+        "status": "PASS",
+        "low_support": false
+      },
+      "entropy_mid": {
+        "delta": 0.09395677019900928,
+        "ci_low": 0.050527337302550046,
+        "ci_high": 0.14079573827091074,
+        "n_rows": 2380,
+        "n_groups": 168,
+        "kl_candidate": 0.7364632107920663,
+        "kl_comparator": 0.6425064405930571,
+        "status": "PASS",
+        "low_support": false
+      },
+      "entropy_high": {
+        "delta": 0.0194043737440176,
+        "ci_low": -0.033170423766110395,
+        "ci_high": 0.07139538315192658,
+        "n_rows": 8048,
+        "n_groups": 250,
+        "kl_candidate": 0.8149229076951275,
+        "kl_comparator": 0.79551853395111,
+        "status": "PASS",
+        "low_support": false
+      },
+      "valid_fraction_lt_0.95": {
+        "delta": 0.11901962824397172,
+        "ci_low": 0.028494085523937007,
+        "ci_high": 0.20589171162052322,
+        "n_rows": 1523,
+        "n_groups": 134,
+        "kl_candidate": 1.0363266366758066,
+        "kl_comparator": 0.917307008431835,
+        "status": "PASS",
+        "low_support": false
+      },
+      "valid_fraction_ge_0.95": {
+        "delta": 0.06432076866814973,
+        "ci_low": 0.029729102324166524,
+        "ci_high": 0.09609636917919324,
+        "n_rows": 19782,
+        "n_groups": 381,
+        "kl_candidate": 0.9174615386957157,
+        "kl_comparator": 0.8531407700275659,
+        "status": "PASS",
+        "low_support": false
+      },
+      "majority_Seizure": {
+        "delta": 0.05576201743273923,
+        "ci_low": -0.006770309446615932,
+        "ci_high": 0.11348346206912129,
+        "n_rows": 4363,
+        "n_groups": 191,
+        "kl_candidate": 0.9834467062937342,
+        "kl_comparator": 0.9276846888609952,
+        "status": "PASS",
+        "low_support": false
+      },
+      "majority_LPD": {
+        "delta": 0.17934286953599488,
+        "ci_low": 0.04549573430463783,
+        "ci_high": 0.3075811794917696,
+        "n_rows": 2485,
+        "n_groups": 52,
+        "kl_candidate": 1.1714653918402536,
+        "kl_comparator": 0.9921225223042587,
+        "status": "PASS",
+        "low_support": false
+      },
+      "majority_GPD": {
+        "delta": 0.08183200542197533,
+        "ci_low": -0.061507701421081876,
+        "ci_high": 0.23482189414076385,
+        "n_rows": 3143,
+        "n_groups": 65,
+        "kl_candidate": 0.9832477023527376,
+        "kl_comparator": 0.9014156969307625,
+        "status": "PASS",
+        "low_support": false
+      },
+      "majority_LRDA": {
+        "delta": -0.02843058050275049,
+        "ci_low": -0.1543938971442906,
+        "ci_high": 0.09254434233062718,
+        "n_rows": 3137,
+        "n_groups": 93,
+        "kl_candidate": 1.5802083060717382,
+        "kl_comparator": 1.608638886574489,
+        "status": "PASS",
+        "low_support": false
+      },
+      "majority_GRDA": {
+        "delta": 0.0388272870601305,
+        "ci_low": -0.029467344256559214,
+        "ci_high": 0.10799080224586803,
+        "n_rows": 3608,
+        "n_groups": 140,
+        "kl_candidate": 0.9791913013075304,
+        "kl_comparator": 0.9403640142473999,
+        "status": "PASS",
+        "low_support": false
+      },
+      "majority_Other": {
+        "delta": 0.06761161342918509,
+        "ci_low": 0.023745085853194327,
+        "ci_high": 0.10813354988076089,
+        "n_rows": 3746,
+        "n_groups": 239,
+        "kl_candidate": 0.776984965995291,
+        "kl_comparator": 0.7093733525661059,
+        "status": "PASS",
+        "low_support": false
+      },
+      "tied_majority": {
+        "delta": 0.04236532608270771,
+        "ci_low": -0.020665997468122848,
+        "ci_high": 0.10607072983607388,
+        "n_rows": 823,
+        "n_groups": 97,
+        "kl_candidate": 0.760113733456987,
+        "kl_comparator": 0.7177484073742791,
+        "status": "PASS",
+        "low_support": false
+      }
+    },
+    "complementary_counts": {
+      "votes": 21305,
+      "entropy": 21305,
+      "valid_fraction": 21305,
+      "majority_plus_tied": 21305
+    },
+    "n_estimable": 17
+  },
+  "output_paths": [
+    "figures/v16_subgroup_forest.png",
+    "figures/v16_subgroup_forest.svg"
+  ],
+  "private_output_paths": [],
+  "status": "PASS",
+  "reason": "",
+  "privacy_review": "aggregate_only; suppression via NOT_ESTIMABLE for tiny strata",
+  "caption": "Subgroup performance forest. Partition: locked test. Counts: rows 21,305 (complementary strata each sum to this count), components 391; per-subgroup groups at the right margin. Model/seed policy: seeds [101, 202, 303] averaged as losses. Metric: paired difference of component-mean calibrated KL, P minus B3. Uncertainty: percentile 95% paired component bootstrap (2000 resamples, seed 20260907); only the overall comparison is confirmatory, subgroup intervals are exploratory without multiplicity adjustment. Source hashes: source f74331b360f11c03; split 4455edaac7cb7e5d; preprocess 2406ce595fbd7457; cache af515c778666c076; protocol 380269a4a6db7334. Strata are the prespecified vote-count bands, development-frozen entropy tertiles, minimum valid fraction bands and unique-majority class; no age, sex, site or disease metadata exist in the source; strata with fewer than 10 rows are NOT_ESTIMABLE; open markers flag fewer than 30 groups.",
+  "generated": "2026-09-06T19:56:43+00:00"
+}

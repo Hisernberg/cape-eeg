@@ -1,0 +1,17 @@
+cff-version: 1.2.0
+message: "If you use this code or results, please cite it as below."
+title: "CAPE-EEG: Byte-Budgeted Foveated Spectrogram Learning with Expert-Disagreement Audits"
+version: 1.0.0
+date-released: 2026-09-07
+authors:
+  - family-names: Nur
+    given-names: Nabid
+repository-code: "https://github.com/Hisernberg/cape-eeg"
+license: MIT
+keywords:
+  - EEG
+  - harmful brain activity
+  - soft labels
+  - expert disagreement
+  - compact convolutional networks
+  - foveated representation

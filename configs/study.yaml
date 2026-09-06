@@ -1,0 +1,109 @@
+project: cape-eeg
+version: 1.0.0
+research_cutoff: '2026-09-07'
+status: RUNNING_LOCAL_DGX
+paths:
+  workspace: '${HOME}/research/cape-eeg'
+  source: '${HMS_DATA_ROOT}'
+  private: '${CAPE_ROOT}/private'
+  export: '${CAPE_ROOT}/public_export'
+source:
+  name: hms-harmful-brain-activity-classification
+  source_mode: local_original
+  hf_dataset_repo: null
+  source_terms_review: LOCAL_RESEARCH_USE_NO_REDISTRIBUTION
+  raw_data_read_only: true
+labels: [seizure_vote, lpd_vote, gpd_vote, lrda_vote, grda_vote, other_vote]
+split:
+  seed: 20260907
+  grouping: patient_eeg_spectrogram_connected_component
+  proportions: {train: 0.60, tune: 0.10, calibration_t: 0.05, calibration_p: 0.05, test: 0.20}
+  final_refit: [train, tune]
+  locked_test: true
+cache:
+  eeg_sample_rate_hz: 200
+  raw_window_seconds: 50
+  target_seconds: [20, 30]
+  context_seconds: 600
+  regions: [LL, RL, LP, RP]
+  frequency_bins: 64
+  focal_time_bins: 32
+  context_time_bins: 64
+  foveated_segments: [[0, 20, 8], [20, 30, 16], [30, 50, 8]]
+  focal_center_fraction: [0.25, 0.75]
+  uniform_center_fraction: [0.40, 0.60]
+  dtype: float16
+  validity: packbits_little
+  shard_rows: 2048
+  max_bytes: 6000000000
+  metadata_budget_bytes: 250000000
+  stft: {window: hann, nperseg: 256, hop: 64, nfft: 256, boundary: null, padded: false}
+  raw_frequency_range_hz: [0.5, 40.0]
+  max_interpolation_gap_seconds: 0.25
+  valid_window_fraction: 0.90
+  minimum_valid_bipolar_leads: 2
+  normalization: train_only_per_view_region
+model:
+  candidate: compact_foveated_gate_disagreement
+  channels: [24, 48, 64, 96, 128]
+  embedding: 128
+  auxiliary_disagreement_weight: 0.1
+  pretrained_baseline_repo: timm/mobilenetv3_small_100.lamb_in1k
+  pretrained_revision: '1824797e7887cbec1990e4adbd6675960a36c589'
+  pretrained_sha256: '46d2c063b18125884c48937afa4c49e18128869e52e8db96df48bf0a4d7ff697'
+  trust_remote_code: false
+training:
+  physical_batch: 64   # profiled: 0.44 GiB peak CUDA at 64, so no accumulation needed
+  effective_batch: 64
+  max_epochs: 12
+  optimizer: AdamW
+  compact_lr: 0.001
+  pretrained_backbone_lr: 0.0001
+  head_lr: 0.001
+  weight_decay: 0.01
+  gradient_clip: 1.0
+  max_development_configs: 8
+  final_seeds: [101, 202, 303]
+  deployment_seed: 101
+  amp: bf16_after_parity_smoke (max |p32-p16| 0.0046)
+  compile: false
+  ensemble: false
+resources:
+  max_gpu_wall_hours: 12.0
+  allocations_hours: {smoke: 0.5, baselines: 1.5, ablations: 1.5, final: 7.0, evaluate: 0.5, contingency: 1.0}
+  max_final_fit_minutes: 70
+  concurrent_gpu_jobs: 1
+  cuda_allocation_stop_gib: 12
+  process_tree_rss_stop_gib: 32
+  minimum_system_available_gib: 32
+  generated_workspace_stop_gib: 30
+  minimum_free_disk_gib: 20
+  workers: 2
+  cpu_threads: 4
+  raw_file_lru_entries: 2
+  container_digest: host_python_env (torch 2.9.0+cu130, no container)
+metrics:
+  primary: three_seed_mean_patient_KL_difference
+  kl_direction: target_to_prediction
+  logarithm: natural
+  prediction_epsilon: 0.0000001
+  bootstrap_replicates: 2000
+  bootstrap_seed: 20260907
+  bootstrap_unit: independent_component
+  hard_label_ties: exclude_hard_metrics_only
+  referral_acceptance: [0.80, 0.90, 0.95]
+  temperature_range: [0.25, 4.0]
+  clinical_noninferiority_margin: null
+publication:
+  push_enabled: false
+  visibility: private
+  owner: Hisernberg
+  repository: cape-eeg
+  branch: main
+  approval_export_hash: null
+  raw_data: false
+  row_predictions: false
+  weights: false
+  max_file_bytes: 10485760
+  max_export_bytes: 104857600
+  minimum_public_cell_groups: 10

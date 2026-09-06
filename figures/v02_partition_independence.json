@@ -1,0 +1,41 @@
+{
+  "figure_id": "V02",
+  "title": "Partition independence matrix",
+  "question": "Are train, tune, calibration and test genuinely separated?",
+  "data_hashes": {
+    "leakage_audit": "b8ca1bbcb88cb33e",
+    "split_summary": "8f78e9b64164b229"
+  },
+  "run_ids": [],
+  "split": "all",
+  "n_rows": 106800,
+  "n_patients": 1950,
+  "n_components": 1950,
+  "generation_code_commit": null,
+  "parameters": {
+    "keys": [
+      "Patients",
+      "EEG recordings",
+      "Spectrograms",
+      "Connected components"
+    ],
+    "forbidden_overlap": 0,
+    "audit_status": "PASS",
+    "off_diagonal_totals": {
+      "Patients": 0,
+      "EEG recordings": 0,
+      "Spectrograms": 0,
+      "Connected components": 0
+    }
+  },
+  "output_paths": [
+    "figures/v02_partition_independence.png",
+    "figures/v02_partition_independence.svg"
+  ],
+  "private_output_paths": [],
+  "status": "PASS",
+  "reason": "",
+  "privacy_review": "aggregate_only; counts only, no identifiers",
+  "caption": "Partition independence matrix. Partition: all five partitions (both axes). Counts: rows 106,800, patients 1,950, components 1,950; keys audited: Patients, EEG recordings, Spectrograms, Connected components. Model/seed policy: no model; deterministic audit of the frozen split. Metric: count of members shared by the row and column partition (diagonal = partition size); every off-diagonal cell must be zero. Uncertainty: none (deterministic audit). Source hashes: source f74331b360f11c03; split 4455edaac7cb7e5d; preprocess 2406ce595fbd7457; cache af515c778666c076; protocol 380269a4a6db7334. Any nonzero forbidden overlap is drawn in saturated red irrespective of magnitude; individual membership tables stay private.",
+  "generated": "2026-09-06T19:54:15+00:00"
+}

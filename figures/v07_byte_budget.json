@@ -1,0 +1,121 @@
+{
+  "figure_id": "V07",
+  "title": "Byte-budget representation comparison",
+  "question": "What information allocation is affordable without hiding storage costs?",
+  "data_hashes": {
+    "cache_manifest": "5b5939562f194525",
+    "development_table": "da5411df1085355a"
+  },
+  "run_ids": [
+    "dev_A1_s101_4455edaa_2406ce59_cb621ea3",
+    "dev_A2_s101_4455edaa_2406ce59_0a1ef11a",
+    "dev_B2_s101_4455edaa_2406ce59_56b0bff3",
+    "dev_B3_s101_4455edaa_2406ce59_1468c89c",
+    "dev_B3_s101_4455edaa_2406ce59_35e6013c",
+    "dev_P_MSF_s101_4455edaa_2406ce59_4611f609",
+    "dev_P_s101_4455edaa_2406ce59_385fb705",
+    "dev_P_s101_4455edaa_2406ce59_c6dac984"
+  ],
+  "split": "train/tune",
+  "n_rows": 106800,
+  "n_patients": null,
+  "n_components": null,
+  "generation_code_commit": null,
+  "parameters": {
+    "points": [
+      {
+        "config": "A1",
+        "lr_mult": 1.0,
+        "encoding": "foveated",
+        "cache_gb": 5.581644753,
+        "kl_mean": 1.00107308479515,
+        "kl_min": 1.00107308479515,
+        "kl_max": 1.00107308479515,
+        "n_seeds": 1,
+        "params": 147524
+      },
+      {
+        "config": "A2",
+        "lr_mult": 1.0,
+        "encoding": "foveated",
+        "cache_gb": 5.581644753,
+        "kl_mean": 0.9903073486767904,
+        "kl_min": 0.9903073486767904,
+        "kl_max": 0.9903073486767904,
+        "n_seeds": 1,
+        "params": 155877
+      },
+      {
+        "config": "B2",
+        "lr_mult": 1.0,
+        "encoding": "uniform",
+        "cache_gb": 5.581644753,
+        "kl_mean": 0.9862376447609912,
+        "kl_min": 0.9862376447609912,
+        "kl_max": 0.9862376447609912,
+        "n_seeds": 1,
+        "params": 147524
+      },
+      {
+        "config": "B3",
+        "lr_mult": 1.0,
+        "encoding": "foveated",
+        "cache_gb": 5.581644753,
+        "kl_mean": 0.9112487991619445,
+        "kl_min": 0.8958896579638898,
+        "kl_max": 0.9266079403599992,
+        "n_seeds": 1,
+        "params": 1524150
+      },
+      {
+        "config": "P",
+        "lr_mult": 1.0,
+        "encoding": "foveated",
+        "cache_gb": 5.581644753,
+        "kl_mean": 0.9549060524578787,
+        "kl_min": 0.9269702005033807,
+        "kl_max": 0.9828419044123766,
+        "n_seeds": 1,
+        "params": 164134
+      },
+      {
+        "config": "P_MSF",
+        "lr_mult": 1.0,
+        "encoding": "foveated",
+        "cache_gb": 5.581644753,
+        "kl_mean": 0.9875494636414468,
+        "kl_min": 0.9875494636414468,
+        "kl_max": 0.9875494636414468,
+        "n_seeds": 1,
+        "params": 208070
+      }
+    ],
+    "measured_bytes": {
+      "local_values": 1749817984,
+      "local_masks": 109369984,
+      "context_values": 3499629184,
+      "context_masks": 218733184,
+      "uniform_local_values": 1749817984,
+      "uniform_local_masks": 109369984,
+      "metadata": 4094417,
+      "foveated_total": 5581644753,
+      "uniform_total": 5581644753
+    },
+    "cap_bytes": 6000000000,
+    "manifest_active_cache_bytes": 5581608449,
+    "manifest_alt_uniform_bytes": 1859187968,
+    "unrun_alternatives": [
+      "higher-resolution pilot: NOT_RUN"
+    ]
+  },
+  "output_paths": [
+    "figures/v07_byte_budget.png",
+    "figures/v07_byte_budget.svg"
+  ],
+  "private_output_paths": [],
+  "status": "PASS",
+  "reason": "",
+  "privacy_review": "aggregate_only; engineering data, no cached tensors",
+  "caption": "Byte-budget representation comparison. Partition: train (fit) / tune (selection); no test data. Counts: cache rows 106,800; 6 configuration points; seeds per point annotated. Model/seed policy: mean over completed development seeds with min-max bars where more than one seed was run. Metric: tune patient-mean KL at the selected epoch versus measured on-disk cache bytes (values + validity masks + metadata). Uncertainty: seed spread only (no bootstrap); higher-resolution pilots that were not run are absent (NOT_RUN), not predicted. Source hashes: source f74331b360f11c03; split 4455edaac7cb7e5d; preprocess 2406ce595fbd7457; cache af515c778666c076; protocol 380269a4a6db7334. Foveated and uniform local encodings share shape, dtype and mask so their payloads are identical by construction; compressed disk bytes and RAM bytes are not mixed.",
+  "generated": "2026-09-06T19:54:18+00:00"
+}

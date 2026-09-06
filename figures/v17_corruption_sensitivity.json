@@ -1,0 +1,180 @@
+{
+  "figure_id": "V17",
+  "title": "Preprocessing and corruption sensitivity",
+  "question": "Does performance remain stable under the fixed stress suite?",
+  "data_hashes": {
+    "protocol_lock": "b89876787fce3fa6",
+    "robustness_evidence": "a5621918a5a51323",
+    "robustness_subset": "ea992e32f62d3668"
+  },
+  "run_ids": [
+    "final_P_s101",
+    "final_B3_s101"
+  ],
+  "split": "test_subset",
+  "n_rows": 777,
+  "n_patients": 391,
+  "n_components": null,
+  "generation_code_commit": null,
+  "parameters": {
+    "conditions": [
+      "region_missing_LL",
+      "time_mask_10pct",
+      "gain_shift_mild",
+      "gain_shift_strong",
+      "stft_window_512"
+    ],
+    "results": {
+      "P": {
+        "region_missing_LL": {
+          "delta_kl": 0.08415945607813202,
+          "ci_low": 0.03787644367804126,
+          "ci_high": 0.13128866168167053,
+          "kl": 0.9908145399717246,
+          "js_distance": 0.19722425298538174,
+          "label_flip_fraction": 0.3127413127413127,
+          "majority_error": 0.4841688654353562,
+          "severity": 1.0,
+          "units": "regions removed",
+          "description": "left-lateral region removed from both views (values zero, validity false)",
+          "status": "PASS"
+        },
+        "time_mask_10pct": {
+          "delta_kl": -0.00023054059009930405,
+          "ci_low": -0.02565031578661736,
+          "ci_high": 0.02375193134482743,
+          "kl": 0.9064245433034933,
+          "js_distance": 0.09885387996324349,
+          "label_flip_fraction": 0.16087516087516088,
+          "majority_error": 0.41424802110817943,
+          "severity": 0.1,
+          "units": "fraction of time axis",
+          "description": "additional contiguous 10% time mask: local [5,10) s, context [60,120) s",
+          "status": "PASS"
+        },
+        "gain_shift_mild": {
+          "delta_kl": 0.007958264330639953,
+          "ci_low": -0.010137022921658013,
+          "ci_high": 0.02646883555690694,
+          "kl": 0.9146133482242326,
+          "js_distance": 0.07549516631722118,
+          "label_flip_fraction": 0.12226512226512226,
+          "majority_error": 0.41952506596306066,
+          "severity": 0.5,
+          "units": "log-power units",
+          "description": "+0.5 natural-log power units added to every valid cell of both views",
+          "status": "PASS"
+        },
+        "gain_shift_strong": {
+          "delta_kl": 0.11857478136952493,
+          "ci_low": 0.0708995998712339,
+          "ci_high": 0.1668083918290095,
+          "kl": 1.0252298652631175,
+          "js_distance": 0.18666703433179438,
+          "label_flip_fraction": 0.29214929214929214,
+          "majority_error": 0.4656992084432718,
+          "severity": 1.5,
+          "units": "log-power units",
+          "description": "+1.5 natural-log power units added to every valid cell of both views",
+          "status": "PASS"
+        },
+        "stft_window_512": {
+          "delta_kl": 0.05309044049105782,
+          "ci_low": 0.024121388104890396,
+          "ci_high": 0.08181368263818979,
+          "kl": 0.9597455243846504,
+          "js_distance": 0.10768534881578255,
+          "label_flip_fraction": 0.17503217503217502,
+          "majority_error": 0.4366754617414248,
+          "severity": 512,
+          "units": "STFT window samples",
+          "description": "local view recomputed with nperseg=nfft=512 (hop 64) instead of 256",
+          "status": "PASS"
+        }
+      },
+      "B3": {
+        "region_missing_LL": {
+          "delta_kl": 0.05279006276130238,
+          "ci_low": 0.0018786789660123733,
+          "ci_high": 0.10183631159136897,
+          "kl": 0.9546546308111933,
+          "js_distance": 0.196585114449302,
+          "label_flip_fraction": 0.3333333333333333,
+          "majority_error": 0.45382585751978893,
+          "severity": 1.0,
+          "units": "regions removed",
+          "description": "left-lateral region removed from both views (values zero, validity false)",
+          "status": "PASS"
+        },
+        "time_mask_10pct": {
+          "delta_kl": -0.006908178832808698,
+          "ci_low": -0.035185238612859944,
+          "ci_high": 0.023178655908630358,
+          "kl": 0.8949563892170822,
+          "js_distance": 0.11250449065725111,
+          "label_flip_fraction": 0.17374517374517376,
+          "majority_error": 0.3733509234828496,
+          "severity": 0.1,
+          "units": "fraction of time axis",
+          "description": "additional contiguous 10% time mask: local [5,10) s, context [60,120) s",
+          "status": "PASS"
+        },
+        "gain_shift_mild": {
+          "delta_kl": -0.0033272692420875938,
+          "ci_low": -0.02229960307037689,
+          "ci_high": 0.014079045376565676,
+          "kl": 0.8985372988078033,
+          "js_distance": 0.06572167484360784,
+          "label_flip_fraction": 0.10167310167310167,
+          "majority_error": 0.39841688654353563,
+          "severity": 0.5,
+          "units": "log-power units",
+          "description": "+0.5 natural-log power units added to every valid cell of both views",
+          "status": "PASS"
+        },
+        "gain_shift_strong": {
+          "delta_kl": 0.040031117005595585,
+          "ci_low": -0.005235804327101579,
+          "ci_high": 0.08310159434424837,
+          "kl": 0.9418956850554865,
+          "js_distance": 0.15971808418764658,
+          "label_flip_fraction": 0.26640926640926643,
+          "majority_error": 0.43007915567282323,
+          "severity": 1.5,
+          "units": "log-power units",
+          "description": "+1.5 natural-log power units added to every valid cell of both views",
+          "status": "PASS"
+        },
+        "stft_window_512": {
+          "delta_kl": 0.1419798379606163,
+          "ci_low": 0.0830784273700006,
+          "ci_high": 0.2007252141427893,
+          "kl": 1.0438444060105072,
+          "js_distance": 0.19323208849841164,
+          "label_flip_fraction": 0.29987129987129985,
+          "majority_error": 0.45382585751978893,
+          "severity": 512,
+          "units": "STFT window samples",
+          "description": "local view recomputed with nperseg=nfft=512 (hop 64) instead of 256",
+          "status": "PASS"
+        }
+      }
+    },
+    "subset": {
+      "n_rows": 777,
+      "n_patients": 391,
+      "seed": 20260907,
+      "hash": "690d276ad8600b56"
+    }
+  },
+  "output_paths": [
+    "figures/v17_corruption_sensitivity.png",
+    "figures/v17_corruption_sensitivity.svg"
+  ],
+  "private_output_paths": [],
+  "status": "PASS",
+  "reason": "",
+  "privacy_review": "aggregate_only; perturbed examples private",
+  "caption": "Preprocessing and corruption sensitivity. Partition: locked test, fixed label-blind subset (seed 20260907, subset hash 690d276ad8600b56). Counts: rows 777, patients 391; identical rows for clean and perturbed inputs. Model/seed policy: deployment seed 101 for both methods. Metric: change in patient-weighted calibrated KL relative to the clean matched input, mean row-wise Jensen-Shannon distance between clean and perturbed predictions, fraction of argmax label flips; severity in the stated units on the x-axis. Uncertainty: paired 95% percentile component-cluster bootstrap for delta KL (2,000 resamples); JS and flips descriptive. Source hashes: source f74331b360f11c03; split 4455edaac7cb7e5d; preprocess 2406ce595fbd7457; cache af515c778666c076; protocol 380269a4a6db7334. Conditions not applicable to a method are marked NOT_RUN; artificial masking and gain shifts are representation-level perturbations.",
+  "generated": "2026-09-06T19:56:43+00:00"
+}

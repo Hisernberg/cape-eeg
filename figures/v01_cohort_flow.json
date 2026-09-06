@@ -1,0 +1,93 @@
+{
+  "figure_id": "V01",
+  "title": "Cohort and exclusion flow",
+  "question": "Who entered the analysis, and who was excluded?",
+  "data_hashes": {
+    "source_manifest": "9a1aa1e8e759bbae",
+    "schema_report": "2ae12acdb31fd761",
+    "split_summary": "8f78e9b64164b229",
+    "row_quality": "a7a3180555d115db",
+    "row_index": "466cad0aa7bb8633",
+    "cache_manifest": "5b5939562f194525",
+    "eval_summary": "c33a22b1ac9ab623",
+    "protocol_lock": "b89876787fce3fa6"
+  },
+  "run_ids": [],
+  "split": "all",
+  "n_rows": 106800,
+  "n_patients": 1950,
+  "n_components": 1950,
+  "generation_code_commit": null,
+  "parameters": {
+    "exclusions": {
+      "Truncated 50 s EEG window": 0,
+      "Short 600 s spectrogram context": 0,
+      "Duplicate label id / zero-vote row (intake gate)": 0
+    },
+    "partitions": {
+      "train": {
+        "rows": 64292,
+        "patients": 1170,
+        "components": 1170
+      },
+      "tune": {
+        "rows": 10667,
+        "patients": 196,
+        "components": 196
+      },
+      "calibration_t": {
+        "rows": 5289,
+        "patients": 95,
+        "components": 95
+      },
+      "calibration_p": {
+        "rows": 5247,
+        "patients": 98,
+        "components": 98
+      },
+      "test": {
+        "rows": 21305,
+        "patients": 391,
+        "components": 391
+      }
+    },
+    "quarantine": {
+      "train": {
+        "rows": 0,
+        "patients": 0
+      },
+      "tune": {
+        "rows": 0,
+        "patients": 0
+      },
+      "calibration_t": {
+        "rows": 0,
+        "patients": 0
+      },
+      "calibration_p": {
+        "rows": 0,
+        "patients": 0
+      },
+      "test": {
+        "rows": 0,
+        "patients": 0
+      }
+    },
+    "final_evaluation": {
+      "rows": 21305,
+      "patients": 391,
+      "components": 391
+    },
+    "small_cell_threshold": 10
+  },
+  "output_paths": [
+    "figures/v01_cohort_flow.png",
+    "figures/v01_cohort_flow.svg"
+  ],
+  "private_output_paths": [],
+  "status": "PASS",
+  "reason": "",
+  "privacy_review": "aggregate_only; small-cell suppression applied; no identifiers",
+  "caption": "Cohort and exclusion flow. Partition: all partitions (intake to allocation); locked test at the final node. Counts: source rows 106,800, patients 1,950, eligible rows 106,800, components 1,950; excluded rows 0. Model/seed policy: no model; deterministic split seed 20260907. Metric: audited counts (rows, independent patients, connected components). Uncertainty: none (deterministic counts). Source hashes: source f74331b360f11c03; split 4455edaac7cb7e5d; preprocess 2406ce595fbd7457; cache af515c778666c076; protocol 380269a4a6db7334. Quarantine counts from the finalized cache; cells with fewer than 10 patients are suppressed.",
+  "generated": "2026-09-06T19:54:14+00:00"
+}

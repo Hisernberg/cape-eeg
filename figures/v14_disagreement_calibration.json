@@ -1,0 +1,193 @@
+{
+  "figure_id": "V14",
+  "title": "Predicted versus observed disagreement",
+  "question": "Does the auxiliary head learn annotation ambiguity?",
+  "data_hashes": {
+    "protocol_lock": "b89876787fce3fa6",
+    "predictions_P_s101": "5ffaa1b46b032301"
+  },
+  "run_ids": [
+    "final_P_s101"
+  ],
+  "split": "test",
+  "n_rows": 21305,
+  "n_patients": 391,
+  "n_components": 391,
+  "generation_code_commit": null,
+  "parameters": {
+    "bands": {
+      "1": {
+        "status": "NOT_ESTIMABLE",
+        "n_rows": 510,
+        "mean_predicted": 0.28111006189502924
+      },
+      "2-4": {
+        "status": "PASS",
+        "n_rows": 11990,
+        "n_patients": 353,
+        "n_groups": 353,
+        "bin_mean_predicted": [
+          0.04728283614415384,
+          0.11385408607004005,
+          0.17642577370259666,
+          0.23800643419646836,
+          0.29570548577337286,
+          0.3513731206552914,
+          0.4143789020256302,
+          0.5150856854958592
+        ],
+        "bin_mean_observed": [
+          0.03746942406048474,
+          0.12130309094952169,
+          0.10117856348676896,
+          0.1393150989548584,
+          0.1693351122970862,
+          0.21480987324883294,
+          0.25333778371161647,
+          0.2426568758344468
+        ],
+        "ci_low": [
+          0.021178270558588733,
+          0.07912510632696064,
+          0.07197319574343305,
+          0.10048724566588695,
+          0.12417755604725908,
+          0.16253737304231594,
+          0.18964132736591563,
+          0.16247864866988151
+        ],
+        "ci_high": [
+          0.05848883819158891,
+          0.17100515945182296,
+          0.13597999140607667,
+          0.1863451829413161,
+          0.22281213651514442,
+          0.26854790372162407,
+          0.3185764853961881,
+          0.3363871313591875
+        ],
+        "spearman": 0.22934183769293215,
+        "mse": 0.10461579822108379
+      },
+      "5-9": {
+        "status": "PASS",
+        "n_rows": 315,
+        "n_patients": 56,
+        "n_groups": 56,
+        "bin_mean_predicted": [
+          0.01885828785598278,
+          0.041520620509982106,
+          0.0718087887391448,
+          0.10125061563956432,
+          0.15278279532988867,
+          0.2572333461199051,
+          0.3728693861227769,
+          0.45164443896367
+        ],
+        "bin_mean_observed": [
+          0.2725,
+          0.39499999999999996,
+          0.4025,
+          0.37435897435897436,
+          0.523076923076923,
+          0.49999999999999983,
+          0.4931623931623931,
+          0.5282051282051281
+        ],
+        "ci_low": [
+          0.12055740037950663,
+          0.2526315789473685,
+          0.3035342261904763,
+          0.24443333333333336,
+          0.4142857142857142,
+          0.38632575757575754,
+          0.4283520114942527,
+          0.46499999999999986
+        ],
+        "ci_high": [
+          0.4347356215213353,
+          0.5099999999999997,
+          0.48600277777777795,
+          0.5077083333333333,
+          0.5874999999999998,
+          0.5941295707472181,
+          0.6333333333333331,
+          0.6399999999999999
+        ],
+        "spearman": 0.22836554077465404,
+        "mse": 0.12543577381724583
+      },
+      "10+": {
+        "status": "PASS",
+        "n_rows": 8490,
+        "n_patients": 239,
+        "n_groups": 239,
+        "bin_mean_predicted": [
+          0.11038445500856907,
+          0.21615850786536428,
+          0.28306083149442574,
+          0.3329376622992344,
+          0.38134860543009247,
+          0.4307774358712537,
+          0.48214338170706833,
+          0.5580218804545497
+        ],
+        "bin_mean_observed": [
+          0.39172770306085275,
+          0.3671408677072821,
+          0.3420817477154136,
+          0.3504961399270125,
+          0.4370338691187952,
+          0.4617215455010877,
+          0.48600234981744667,
+          0.541836685282395
+        ],
+        "ci_low": [
+          0.3266801314440042,
+          0.31808031344534077,
+          0.269113165382473,
+          0.2825142145858725,
+          0.3847718163437244,
+          0.42187527018845433,
+          0.43842193516042854,
+          0.49878774876346865
+        ],
+        "ci_high": [
+          0.44801969346356235,
+          0.4166185773219392,
+          0.42277223059230606,
+          0.4271964842584356,
+          0.48388298205534247,
+          0.4981879911650061,
+          0.5211921244900913,
+          0.5778265221071512
+        ],
+        "spearman": 0.2405945048850248,
+        "mse": 0.06416929345249865
+      }
+    },
+    "overall": {
+      "stratum": "overall (n>1)",
+      "n_min": 2,
+      "n_max": null,
+      "n_rows": 20795,
+      "n_rows_estimable": 20795,
+      "mean_observed": 0.2711866765454996,
+      "mean_predicted": 0.30046232080952107,
+      "mse": 0.08841803274031934,
+      "spearman": 0.30501554187467345,
+      "status": "PASS",
+      "reason": null
+    }
+  },
+  "output_paths": [
+    "figures/v14_disagreement_calibration.png",
+    "figures/v14_disagreement_calibration.svg"
+  ],
+  "private_output_paths": [],
+  "status": "PASS",
+  "reason": "",
+  "privacy_review": "aggregate_only; binned aggregates, raw vote rows private",
+  "caption": "Predicted versus observed disagreement. Partition: locked test. Counts: rows 21,305 (510 single-vote rows not estimable), patients 391, components 391; per-band counts in panels. Model/seed policy: deployment seed 101, P only (comparator has no auxiliary head). Metric: observed d = 1 - sum v_k(v_k-1)/(n(n-1)) (may reach 1, never capped at 5/6) versus predicted d_hat, eight equal-count bins per prespecified vote-count band. Uncertainty: per-bin 95% percentile component-cluster bootstrap of the observed mean (2000 resamples, seed 20260907); Spearman and MSE per band. Source hashes: source f74331b360f11c03; split 4455edaac7cb7e5d; preprocess 2406ce595fbd7457; cache af515c778666c076; protocol 380269a4a6db7334. Single-vote rows are shown as NOT_ESTIMABLE, never as zero; no Bayesian uncertainty decomposition is claimed.",
+  "generated": "2026-09-06T19:56:13+00:00"
+}

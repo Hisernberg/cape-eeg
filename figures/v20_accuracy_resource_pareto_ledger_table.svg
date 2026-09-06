@@ -1,0 +1,523 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+  "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg xmlns:xlink="http://www.w3.org/1999/xlink" width="516.6pt" height="403.121794pt" viewBox="0 0 516.6 403.121794" xmlns="http://www.w3.org/2000/svg" version="1.1">
+ <metadata>
+  <rdf:RDF xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+   <cc:Work>
+    <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
+    <dc:date>2026-09-07T04:56:44.345501</dc:date>
+    <dc:format>image/svg+xml</dc:format>
+    <dc:creator>
+     <cc:Agent>
+      <dc:title>Matplotlib v3.10.9, https://matplotlib.org/</dc:title>
+     </cc:Agent>
+    </dc:creator>
+   </cc:Work>
+  </rdf:RDF>
+ </metadata>
+ <defs>
+  <style type="text/css">*{stroke-linejoin: round; stroke-linecap: butt}</style>
+ </defs>
+ <g id="figure_1">
+  <g id="patch_1">
+   <path d="M 0 403.121794 
+L 516.6 403.121794 
+L 516.6 0 
+L 0 0 
+z
+" style="fill: #ffffff"/>
+  </g>
+  <g id="axes_1">
+   <g id="table_1">
+    <g id="patch_2">
+     <path d="M 7.2 57.980194 
+L 258.3 57.980194 
+L 258.3 42.980194 
+L 7.2 42.980194 
+z
+" style="fill: #eef3fb; stroke: #d9d8d2; stroke-linejoin: miter"/>
+    </g>
+    <g id="text_1">
+     <text style="font-weight: 600; font-size: 7.5px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #0b0b0b" x="32.31" y="52.549725" transform="rotate(-0 32.31 52.549725)">Resource item</text>
+    </g>
+    <g id="patch_3">
+     <path d="M 258.3 57.980194 
+L 509.4 57.980194 
+L 509.4 42.980194 
+L 258.3 42.980194 
+z
+" style="fill: #eef3fb; stroke: #d9d8d2; stroke-linejoin: miter"/>
+    </g>
+    <g id="text_2">
+     <text style="font-weight: 600; font-size: 7.5px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #0b0b0b" x="283.41" y="52.549725" transform="rotate(-0 283.41 52.549725)">Measured value</text>
+    </g>
+    <g id="patch_4">
+     <path d="M 7.2 72.980194 
+L 258.3 72.980194 
+L 258.3 57.980194 
+L 7.2 57.980194 
+z
+" style="fill: #ffffff; stroke: #d9d8d2; stroke-linejoin: miter"/>
+    </g>
+    <g id="text_3">
+     <text style="font-size: 7.5px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #0b0b0b" x="32.31" y="67.549725" transform="rotate(-0 32.31 67.549725)">GPU hours total (all jobs incl. failures)</text>
+    </g>
+    <g id="patch_5">
+     <path d="M 258.3 72.980194 
+L 509.4 72.980194 
+L 509.4 57.980194 
+L 258.3 57.980194 
+z
+" style="fill: #ffffff; stroke: #d9d8d2; stroke-linejoin: miter"/>
+    </g>
+    <g id="text_4">
+     <text style="font-size: 7.5px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #0b0b0b" x="283.41" y="67.549725" transform="rotate(-0 283.41 67.549725)">0.72 of 12 h ceiling</text>
+    </g>
+    <g id="patch_6">
+     <path d="M 7.2 87.980194 
+L 258.3 87.980194 
+L 258.3 72.980194 
+L 7.2 72.980194 
+z
+" style="fill: #ffffff; stroke: #d9d8d2; stroke-linejoin: miter"/>
+    </g>
+    <g id="text_5">
+     <text style="font-size: 7.5px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #0b0b0b" x="32.31" y="82.549725" transform="rotate(-0 32.31 82.549725)">GPU jobs / failed or incomplete</text>
+    </g>
+    <g id="patch_7">
+     <path d="M 258.3 87.980194 
+L 509.4 87.980194 
+L 509.4 72.980194 
+L 258.3 72.980194 
+z
+" style="fill: #ffffff; stroke: #d9d8d2; stroke-linejoin: miter"/>
+    </g>
+    <g id="text_6">
+     <text style="font-size: 7.5px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #0b0b0b" x="283.41" y="82.549725" transform="rotate(-0 283.41 82.549725)">17 / 0</text>
+    </g>
+    <g id="patch_8">
+     <path d="M 7.2 102.980194 
+L 258.3 102.980194 
+L 258.3 87.980194 
+L 7.2 87.980194 
+z
+" style="fill: #ffffff; stroke: #d9d8d2; stroke-linejoin: miter"/>
+    </g>
+    <g id="text_7">
+     <text style="font-size: 7.5px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #0b0b0b" x="32.31" y="97.549725" transform="rotate(-0 32.31 97.549725)">GPU hours: baselines</text>
+    </g>
+    <g id="patch_9">
+     <path d="M 258.3 102.980194 
+L 509.4 102.980194 
+L 509.4 87.980194 
+L 258.3 87.980194 
+z
+" style="fill: #ffffff; stroke: #d9d8d2; stroke-linejoin: miter"/>
+    </g>
+    <g id="text_8">
+     <text style="font-size: 7.5px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #0b0b0b" x="283.41" y="97.549725" transform="rotate(-0 283.41 97.549725)">0.17 h</text>
+    </g>
+    <g id="patch_10">
+     <path d="M 7.2 117.980194 
+L 258.3 117.980194 
+L 258.3 102.980194 
+L 7.2 102.980194 
+z
+" style="fill: #ffffff; stroke: #d9d8d2; stroke-linejoin: miter"/>
+    </g>
+    <g id="text_9">
+     <text style="font-size: 7.5px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #0b0b0b" x="32.31" y="112.549725" transform="rotate(-0 32.31 112.549725)">GPU hours: ablations</text>
+    </g>
+    <g id="patch_11">
+     <path d="M 258.3 117.980194 
+L 509.4 117.980194 
+L 509.4 102.980194 
+L 258.3 102.980194 
+z
+" style="fill: #ffffff; stroke: #d9d8d2; stroke-linejoin: miter"/>
+    </g>
+    <g id="text_10">
+     <text style="font-size: 7.5px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #0b0b0b" x="283.41" y="112.549725" transform="rotate(-0 283.41 112.549725)">0.36 h</text>
+    </g>
+    <g id="patch_12">
+     <path d="M 7.2 132.980194 
+L 258.3 132.980194 
+L 258.3 117.980194 
+L 7.2 117.980194 
+z
+" style="fill: #ffffff; stroke: #d9d8d2; stroke-linejoin: miter"/>
+    </g>
+    <g id="text_11">
+     <text style="font-size: 7.5px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #0b0b0b" x="32.31" y="127.549725" transform="rotate(-0 32.31 127.549725)">GPU hours: final</text>
+    </g>
+    <g id="patch_13">
+     <path d="M 258.3 132.980194 
+L 509.4 132.980194 
+L 509.4 117.980194 
+L 258.3 117.980194 
+z
+" style="fill: #ffffff; stroke: #d9d8d2; stroke-linejoin: miter"/>
+    </g>
+    <g id="text_12">
+     <text style="font-size: 7.5px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #0b0b0b" x="283.41" y="127.549725" transform="rotate(-0 283.41 127.549725)">0.19 h</text>
+    </g>
+    <g id="patch_14">
+     <path d="M 7.2 147.980194 
+L 258.3 147.980194 
+L 258.3 132.980194 
+L 7.2 132.980194 
+z
+" style="fill: #ffffff; stroke: #d9d8d2; stroke-linejoin: miter"/>
+    </g>
+    <g id="text_13">
+     <text style="font-size: 7.5px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #0b0b0b" x="32.31" y="142.549725" transform="rotate(-0 32.31 142.549725)">Active cache (values + masks + metadata)</text>
+    </g>
+    <g id="patch_15">
+     <path d="M 258.3 147.980194 
+L 509.4 147.980194 
+L 509.4 132.980194 
+L 258.3 132.980194 
+z
+" style="fill: #ffffff; stroke: #d9d8d2; stroke-linejoin: miter"/>
+    </g>
+    <g id="text_14">
+     <text style="font-size: 7.5px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #0b0b0b" x="283.41" y="142.549725" transform="rotate(-0 283.41 142.549725)">5.582 GB (cap 6.0; within cap: True)</text>
+    </g>
+    <g id="patch_16">
+     <path d="M 7.2 162.980194 
+L 258.3 162.980194 
+L 258.3 147.980194 
+L 7.2 147.980194 
+z
+" style="fill: #ffffff; stroke: #d9d8d2; stroke-linejoin: miter"/>
+    </g>
+    <g id="text_15">
+     <text style="font-size: 7.5px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #0b0b0b" x="32.31" y="157.549725" transform="rotate(-0 32.31 157.549725)">Alternate uniform local cache</text>
+    </g>
+    <g id="patch_17">
+     <path d="M 258.3 162.980194 
+L 509.4 162.980194 
+L 509.4 147.980194 
+L 258.3 147.980194 
+z
+" style="fill: #ffffff; stroke: #d9d8d2; stroke-linejoin: miter"/>
+    </g>
+    <g id="text_16">
+     <text style="font-size: 7.5px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #0b0b0b" x="283.41" y="157.549725" transform="rotate(-0 283.41 157.549725)">1.859 GB</text>
+    </g>
+    <g id="patch_18">
+     <path d="M 7.2 177.980194 
+L 258.3 177.980194 
+L 258.3 162.980194 
+L 7.2 162.980194 
+z
+" style="fill: #ffffff; stroke: #d9d8d2; stroke-linejoin: miter"/>
+    </g>
+    <g id="text_17">
+     <text style="font-size: 7.5px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #0b0b0b" x="32.31" y="172.549725" transform="rotate(-0 32.31 172.549725)">Source bytes (read-only)</text>
+    </g>
+    <g id="patch_19">
+     <path d="M 258.3 177.980194 
+L 509.4 177.980194 
+L 509.4 162.980194 
+L 258.3 162.980194 
+z
+" style="fill: #ffffff; stroke: #d9d8d2; stroke-linejoin: miter"/>
+    </g>
+    <g id="text_18">
+     <text style="font-size: 7.5px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #0b0b0b" x="283.41" y="172.549725" transform="rotate(-0 283.41 172.549725)">25.91 GB</text>
+    </g>
+    <g id="patch_20">
+     <path d="M 7.2 192.980194 
+L 258.3 192.980194 
+L 258.3 177.980194 
+L 7.2 177.980194 
+z
+" style="fill: #ffffff; stroke: #d9d8d2; stroke-linejoin: miter"/>
+    </g>
+    <g id="text_19">
+     <text style="font-size: 7.5px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #0b0b0b" x="32.31" y="187.549725" transform="rotate(-0 32.31 187.549725)">Cache conversion wall time</text>
+    </g>
+    <g id="patch_21">
+     <path d="M 258.3 192.980194 
+L 509.4 192.980194 
+L 509.4 177.980194 
+L 258.3 177.980194 
+z
+" style="fill: #ffffff; stroke: #d9d8d2; stroke-linejoin: miter"/>
+    </g>
+    <g id="text_20">
+     <text style="font-size: 7.5px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #0b0b0b" x="283.41" y="187.549725" transform="rotate(-0 283.41 187.549725)">13.1 min</text>
+    </g>
+    <g id="patch_22">
+     <path d="M 7.2 207.980194 
+L 258.3 207.980194 
+L 258.3 192.980194 
+L 7.2 192.980194 
+z
+" style="fill: #ffffff; stroke: #d9d8d2; stroke-linejoin: miter"/>
+    </g>
+    <g id="text_21">
+     <text style="font-size: 7.5px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #0b0b0b" x="32.31" y="202.445428" transform="rotate(-0 32.31 202.445428)">Final fit P_s101: wall / peak CUDA / peak RSS / params</text>
+    </g>
+    <g id="patch_23">
+     <path d="M 258.3 207.980194 
+L 509.4 207.980194 
+L 509.4 192.980194 
+L 258.3 192.980194 
+z
+" style="fill: #ffffff; stroke: #d9d8d2; stroke-linejoin: miter"/>
+    </g>
+    <g id="text_22">
+     <text style="font-size: 7.5px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #0b0b0b" x="283.41" y="202.549725" transform="rotate(-0 283.41 202.549725)">1.1 min / 0.44 GiB / 7.59 GiB / 164,134</text>
+    </g>
+    <g id="patch_24">
+     <path d="M 7.2 222.980194 
+L 258.3 222.980194 
+L 258.3 207.980194 
+L 7.2 207.980194 
+z
+" style="fill: #ffffff; stroke: #d9d8d2; stroke-linejoin: miter"/>
+    </g>
+    <g id="text_23">
+     <text style="font-size: 7.5px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #0b0b0b" x="32.31" y="217.445428" transform="rotate(-0 32.31 217.445428)">Final fit P_s202: wall / peak CUDA / peak RSS / params</text>
+    </g>
+    <g id="patch_25">
+     <path d="M 258.3 222.980194 
+L 509.4 222.980194 
+L 509.4 207.980194 
+L 258.3 207.980194 
+z
+" style="fill: #ffffff; stroke: #d9d8d2; stroke-linejoin: miter"/>
+    </g>
+    <g id="text_24">
+     <text style="font-size: 7.5px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #0b0b0b" x="283.41" y="217.549725" transform="rotate(-0 283.41 217.549725)">1.4 min / 0.44 GiB / 7.57 GiB / 164,134</text>
+    </g>
+    <g id="patch_26">
+     <path d="M 7.2 237.980194 
+L 258.3 237.980194 
+L 258.3 222.980194 
+L 7.2 222.980194 
+z
+" style="fill: #ffffff; stroke: #d9d8d2; stroke-linejoin: miter"/>
+    </g>
+    <g id="text_25">
+     <text style="font-size: 7.5px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #0b0b0b" x="32.31" y="232.445428" transform="rotate(-0 32.31 232.445428)">Final fit P_s303: wall / peak CUDA / peak RSS / params</text>
+    </g>
+    <g id="patch_27">
+     <path d="M 258.3 237.980194 
+L 509.4 237.980194 
+L 509.4 222.980194 
+L 258.3 222.980194 
+z
+" style="fill: #ffffff; stroke: #d9d8d2; stroke-linejoin: miter"/>
+    </g>
+    <g id="text_26">
+     <text style="font-size: 7.5px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #0b0b0b" x="283.41" y="232.549725" transform="rotate(-0 283.41 232.549725)">1.3 min / 0.44 GiB / 7.56 GiB / 164,134</text>
+    </g>
+    <g id="patch_28">
+     <path d="M 7.2 252.980194 
+L 258.3 252.980194 
+L 258.3 237.980194 
+L 7.2 237.980194 
+z
+" style="fill: #ffffff; stroke: #d9d8d2; stroke-linejoin: miter"/>
+    </g>
+    <g id="text_27">
+     <text style="font-size: 7.5px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #0b0b0b" x="32.31" y="247.445428" transform="rotate(-0 32.31 247.445428)">Final fit B3_s101: wall / peak CUDA / peak RSS / params</text>
+    </g>
+    <g id="patch_29">
+     <path d="M 258.3 252.980194 
+L 509.4 252.980194 
+L 509.4 237.980194 
+L 258.3 237.980194 
+z
+" style="fill: #ffffff; stroke: #d9d8d2; stroke-linejoin: miter"/>
+    </g>
+    <g id="text_28">
+     <text style="font-size: 7.5px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #0b0b0b" x="283.41" y="247.549725" transform="rotate(-0 283.41 247.549725)">1.0 min / 0.43 GiB / 7.27 GiB / 1,524,150</text>
+    </g>
+    <g id="patch_30">
+     <path d="M 7.2 267.980194 
+L 258.3 267.980194 
+L 258.3 252.980194 
+L 7.2 252.980194 
+z
+" style="fill: #ffffff; stroke: #d9d8d2; stroke-linejoin: miter"/>
+    </g>
+    <g id="text_29">
+     <text style="font-size: 7.5px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #0b0b0b" x="32.31" y="262.445428" transform="rotate(-0 32.31 262.445428)">Final fit B3_s202: wall / peak CUDA / peak RSS / params</text>
+    </g>
+    <g id="patch_31">
+     <path d="M 258.3 267.980194 
+L 509.4 267.980194 
+L 509.4 252.980194 
+L 258.3 252.980194 
+z
+" style="fill: #ffffff; stroke: #d9d8d2; stroke-linejoin: miter"/>
+    </g>
+    <g id="text_30">
+     <text style="font-size: 7.5px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #0b0b0b" x="283.41" y="262.549725" transform="rotate(-0 283.41 262.549725)">1.1 min / 0.43 GiB / 7.26 GiB / 1,524,150</text>
+    </g>
+    <g id="patch_32">
+     <path d="M 7.2 282.980194 
+L 258.3 282.980194 
+L 258.3 267.980194 
+L 7.2 267.980194 
+z
+" style="fill: #ffffff; stroke: #d9d8d2; stroke-linejoin: miter"/>
+    </g>
+    <g id="text_31">
+     <text style="font-size: 7.5px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #0b0b0b" x="32.31" y="277.445428" transform="rotate(-0 32.31 277.445428)">Final fit B3_s303: wall / peak CUDA / peak RSS / params</text>
+    </g>
+    <g id="patch_33">
+     <path d="M 258.3 282.980194 
+L 509.4 282.980194 
+L 509.4 267.980194 
+L 258.3 267.980194 
+z
+" style="fill: #ffffff; stroke: #d9d8d2; stroke-linejoin: miter"/>
+    </g>
+    <g id="text_32">
+     <text style="font-size: 7.5px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #0b0b0b" x="283.41" y="277.549725" transform="rotate(-0 283.41 277.549725)">0.9 min / 0.43 GiB / 7.26 GiB / 1,524,150</text>
+    </g>
+    <g id="patch_34">
+     <path d="M 7.2 297.980194 
+L 258.3 297.980194 
+L 258.3 282.980194 
+L 7.2 282.980194 
+z
+" style="fill: #ffffff; stroke: #d9d8d2; stroke-linejoin: miter"/>
+    </g>
+    <g id="text_33">
+     <text style="font-size: 7.5px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #0b0b0b" x="32.31" y="292.445428" transform="rotate(-0 32.31 292.445428)">Final fit P_MSF_s101: wall / peak CUDA / peak RSS / params</text>
+    </g>
+    <g id="patch_35">
+     <path d="M 258.3 297.980194 
+L 509.4 297.980194 
+L 509.4 282.980194 
+L 258.3 282.980194 
+z
+" style="fill: #ffffff; stroke: #d9d8d2; stroke-linejoin: miter"/>
+    </g>
+    <g id="text_34">
+     <text style="font-size: 7.5px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #0b0b0b" x="283.41" y="292.549725" transform="rotate(-0 283.41 292.549725)">1.5 min / 0.49 GiB / 7.57 GiB / 208,070</text>
+    </g>
+    <g id="patch_36">
+     <path d="M 7.2 312.980194 
+L 258.3 312.980194 
+L 258.3 297.980194 
+L 7.2 297.980194 
+z
+" style="fill: #ffffff; stroke: #d9d8d2; stroke-linejoin: miter"/>
+    </g>
+    <g id="text_35">
+     <text style="font-size: 7.5px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #0b0b0b" x="32.31" y="307.445428" transform="rotate(-0 32.31 307.445428)">Final fit P_MSF_s202: wall / peak CUDA / peak RSS / params</text>
+    </g>
+    <g id="patch_37">
+     <path d="M 258.3 312.980194 
+L 509.4 312.980194 
+L 509.4 297.980194 
+L 258.3 297.980194 
+z
+" style="fill: #ffffff; stroke: #d9d8d2; stroke-linejoin: miter"/>
+    </g>
+    <g id="text_36">
+     <text style="font-size: 7.5px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #0b0b0b" x="283.41" y="307.549725" transform="rotate(-0 283.41 307.549725)">1.7 min / 0.49 GiB / 7.57 GiB / 208,070</text>
+    </g>
+    <g id="patch_38">
+     <path d="M 7.2 327.980194 
+L 258.3 327.980194 
+L 258.3 312.980194 
+L 7.2 312.980194 
+z
+" style="fill: #ffffff; stroke: #d9d8d2; stroke-linejoin: miter"/>
+    </g>
+    <g id="text_37">
+     <text style="font-size: 7.5px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #0b0b0b" x="32.31" y="322.445428" transform="rotate(-0 32.31 322.445428)">Final fit P_MSF_s303: wall / peak CUDA / peak RSS / params</text>
+    </g>
+    <g id="patch_39">
+     <path d="M 258.3 327.980194 
+L 509.4 327.980194 
+L 509.4 312.980194 
+L 258.3 312.980194 
+z
+" style="fill: #ffffff; stroke: #d9d8d2; stroke-linejoin: miter"/>
+    </g>
+    <g id="text_38">
+     <text style="font-size: 7.5px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #0b0b0b" x="283.41" y="322.549725" transform="rotate(-0 283.41 322.549725)">1.4 min / 0.49 GiB / 7.57 GiB / 208,070</text>
+    </g>
+    <g id="patch_40">
+     <path d="M 7.2 342.980194 
+L 258.3 342.980194 
+L 258.3 327.980194 
+L 7.2 327.980194 
+z
+" style="fill: #ffffff; stroke: #d9d8d2; stroke-linejoin: miter"/>
+    </g>
+    <g id="text_39">
+     <text style="font-size: 7.5px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #0b0b0b" x="32.31" y="337.549725" transform="rotate(-0 32.31 337.549725)">Latency P: batch 1 / batch 32 / raw-to-prediction</text>
+    </g>
+    <g id="patch_41">
+     <path d="M 258.3 342.980194 
+L 509.4 342.980194 
+L 509.4 327.980194 
+L 258.3 327.980194 
+z
+" style="fill: #ffffff; stroke: #d9d8d2; stroke-linejoin: miter"/>
+    </g>
+    <g id="text_40">
+     <text style="font-size: 7.5px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #0b0b0b" x="283.41" y="337.549725" transform="rotate(-0 283.41 337.549725)">1.36 ms (p95 1.38) / 2.62 ms (12202 ex/s) / 45 ms</text>
+    </g>
+    <g id="patch_42">
+     <path d="M 7.2 357.980194 
+L 258.3 357.980194 
+L 258.3 342.980194 
+L 7.2 342.980194 
+z
+" style="fill: #ffffff; stroke: #d9d8d2; stroke-linejoin: miter"/>
+    </g>
+    <g id="text_41">
+     <text style="font-size: 7.5px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #0b0b0b" x="32.31" y="352.549725" transform="rotate(-0 32.31 352.549725)">Latency B3: batch 1 / batch 32 / raw-to-prediction</text>
+    </g>
+    <g id="patch_43">
+     <path d="M 258.3 357.980194 
+L 509.4 357.980194 
+L 509.4 342.980194 
+L 258.3 342.980194 
+z
+" style="fill: #ffffff; stroke: #d9d8d2; stroke-linejoin: miter"/>
+    </g>
+    <g id="text_42">
+     <text style="font-size: 7.5px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #0b0b0b" x="283.41" y="352.549725" transform="rotate(-0 283.41 352.549725)">1.50 ms (p95 1.53) / 1.87 ms (17077 ex/s) / 44 ms</text>
+    </g>
+    <g id="patch_44">
+     <path d="M 7.2 372.980194 
+L 258.3 372.980194 
+L 258.3 357.980194 
+L 7.2 357.980194 
+z
+" style="fill: #ffffff; stroke: #d9d8d2; stroke-linejoin: miter"/>
+    </g>
+    <g id="text_43">
+     <text style="font-size: 7.5px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #0b0b0b" x="32.31" y="367.549725" transform="rotate(-0 32.31 367.549725)">Energy</text>
+    </g>
+    <g id="patch_45">
+     <path d="M 258.3 372.980194 
+L 509.4 372.980194 
+L 509.4 357.980194 
+L 258.3 357.980194 
+z
+" style="fill: #ffffff; stroke: #d9d8d2; stroke-linejoin: miter"/>
+    </g>
+    <g id="text_44">
+     <text style="font-size: 7.5px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #0b0b0b" x="283.41" y="367.445428" transform="rotate(-0 283.41 367.445428)">NOT_MEASURED (no credible power sensor boundary on the unified-memory system)</text>
+    </g>
+   </g>
+   <g id="text_45">
+    <text style="font-weight: 600; font-size: 9px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #0b0b0b" x="7.2" y="14.038594" transform="rotate(-0 7.2 14.038594)">V20 companion  Resource ledger (measured; private paths redacted; energy not fabricated)</text>
+   </g>
+  </g>
+ </g>
+</svg>

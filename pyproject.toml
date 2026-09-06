@@ -1,0 +1,17 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "cape-eeg"
+version = "1.0.0"
+description = "CAPE-EEG: byte-budgeted foveated spectrogram learning with expert-disagreement audits on HMS harmful brain activity data"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = ["numpy", "pandas", "pyarrow", "scipy", "scikit-learn", "torch", "timm", "matplotlib", "pyyaml"]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

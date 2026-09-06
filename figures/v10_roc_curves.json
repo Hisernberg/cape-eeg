@@ -1,0 +1,366 @@
+{
+  "figure_id": "V10",
+  "title": "One-vs-rest ROC curves",
+  "question": "Which patterns are discriminable under unique-majority labels?",
+  "data_hashes": {
+    "protocol_lock": "b89876787fce3fa6",
+    "predictions_P_s101": "5ffaa1b46b032301",
+    "predictions_B3_s101": "24b43afacff53d20"
+  },
+  "run_ids": [
+    "final_P_s101",
+    "final_B3_s101"
+  ],
+  "split": "test",
+  "n_rows": 20482,
+  "n_patients": 391,
+  "n_components": 391,
+  "generation_code_commit": null,
+  "parameters": {
+    "per_class": {
+      "calibrated_candidate": [
+        {
+          "class": "Seizure",
+          "n_pos_rows": 4363,
+          "n_neg_rows": 16119,
+          "n_pos_patients": 191,
+          "n_neg_patients": 344,
+          "prevalence": 0.21301630700126942,
+          "point": 0.885013389627913,
+          "ci_low": 0.8566529130874151,
+          "ci_high": 0.9114273522572172,
+          "status": "PASS",
+          "low_support": false
+        },
+        {
+          "class": "LPD",
+          "n_pos_rows": 2485,
+          "n_neg_rows": 17997,
+          "n_pos_patients": 52,
+          "n_neg_patients": 391,
+          "prevalence": 0.12132604237867396,
+          "point": 0.8725040580763014,
+          "ci_low": 0.806865970292176,
+          "ci_high": 0.9168258576847149,
+          "status": "PASS",
+          "low_support": false
+        },
+        {
+          "class": "GPD",
+          "n_pos_rows": 3143,
+          "n_neg_rows": 17339,
+          "n_pos_patients": 65,
+          "n_neg_patients": 389,
+          "prevalence": 0.1534518113465482,
+          "point": 0.9253118508926733,
+          "ci_low": 0.8902553115851387,
+          "ci_high": 0.9524145437315469,
+          "status": "PASS",
+          "low_support": false
+        },
+        {
+          "class": "LRDA",
+          "n_pos_rows": 3137,
+          "n_neg_rows": 17345,
+          "n_pos_patients": 93,
+          "n_neg_patients": 379,
+          "prevalence": 0.153158871203984,
+          "point": 0.8012223387932628,
+          "ci_low": 0.7514428392669229,
+          "ci_high": 0.847480817878382,
+          "status": "PASS",
+          "low_support": false
+        },
+        {
+          "class": "GRDA",
+          "n_pos_rows": 3608,
+          "n_neg_rows": 16874,
+          "n_pos_patients": 140,
+          "n_neg_patients": 359,
+          "prevalence": 0.1761546723952739,
+          "point": 0.89980559248711,
+          "ci_low": 0.8733542390913672,
+          "ci_high": 0.9240707398207858,
+          "status": "PASS",
+          "low_support": false
+        },
+        {
+          "class": "Other",
+          "n_pos_rows": 3746,
+          "n_neg_rows": 16736,
+          "n_pos_patients": 239,
+          "n_neg_patients": 345,
+          "prevalence": 0.18289229567425055,
+          "point": 0.7817737900669574,
+          "ci_low": 0.7492139092117884,
+          "ci_high": 0.8113824326309429,
+          "status": "PASS",
+          "low_support": false
+        }
+      ],
+      "calibrated_comparator": [
+        {
+          "class": "Seizure",
+          "n_pos_rows": 4363,
+          "n_neg_rows": 16119,
+          "n_pos_patients": 191,
+          "n_neg_patients": 344,
+          "prevalence": 0.21301630700126942,
+          "point": 0.9154895224958276,
+          "ci_low": 0.8926897929980879,
+          "ci_high": 0.9352027054888398,
+          "status": "PASS",
+          "low_support": false
+        },
+        {
+          "class": "LPD",
+          "n_pos_rows": 2485,
+          "n_neg_rows": 17997,
+          "n_pos_patients": 52,
+          "n_neg_patients": 391,
+          "prevalence": 0.12132604237867396,
+          "point": 0.9031233128615557,
+          "ci_low": 0.8630186751908672,
+          "ci_high": 0.9338324817803016,
+          "status": "PASS",
+          "low_support": false
+        },
+        {
+          "class": "GPD",
+          "n_pos_rows": 3143,
+          "n_neg_rows": 17339,
+          "n_pos_patients": 65,
+          "n_neg_patients": 389,
+          "prevalence": 0.1534518113465482,
+          "point": 0.9319968518331928,
+          "ci_low": 0.8923907005989523,
+          "ci_high": 0.9606749455496036,
+          "status": "PASS",
+          "low_support": false
+        },
+        {
+          "class": "LRDA",
+          "n_pos_rows": 3137,
+          "n_neg_rows": 17345,
+          "n_pos_patients": 93,
+          "n_neg_patients": 379,
+          "prevalence": 0.153158871203984,
+          "point": 0.8134433007576648,
+          "ci_low": 0.7597557833913919,
+          "ci_high": 0.8601659884062891,
+          "status": "PASS",
+          "low_support": false
+        },
+        {
+          "class": "GRDA",
+          "n_pos_rows": 3608,
+          "n_neg_rows": 16874,
+          "n_pos_patients": 140,
+          "n_neg_patients": 359,
+          "prevalence": 0.1761546723952739,
+          "point": 0.9148584020549333,
+          "ci_low": 0.8913433850649183,
+          "ci_high": 0.9348998040068579,
+          "status": "PASS",
+          "low_support": false
+        },
+        {
+          "class": "Other",
+          "n_pos_rows": 3746,
+          "n_neg_rows": 16736,
+          "n_pos_patients": 239,
+          "n_neg_patients": 345,
+          "prevalence": 0.18289229567425055,
+          "point": 0.8189072008230067,
+          "ci_low": 0.788595960392224,
+          "ci_high": 0.8479903991968396,
+          "status": "PASS",
+          "low_support": false
+        }
+      ],
+      "raw_candidate": [
+        {
+          "class": "Seizure",
+          "n_pos_rows": 4363,
+          "n_neg_rows": 16119,
+          "n_pos_patients": 191,
+          "n_neg_patients": 344,
+          "prevalence": 0.21301630700126942,
+          "point": 0.8857953204078359,
+          "ci_low": 0.8577602507839572,
+          "ci_high": 0.9122587761717286,
+          "status": "PASS",
+          "low_support": false
+        },
+        {
+          "class": "LPD",
+          "n_pos_rows": 2485,
+          "n_neg_rows": 17997,
+          "n_pos_patients": 52,
+          "n_neg_patients": 391,
+          "prevalence": 0.12132604237867396,
+          "point": 0.8724727092342351,
+          "ci_low": 0.8070448722024264,
+          "ci_high": 0.9168206673503281,
+          "status": "PASS",
+          "low_support": false
+        },
+        {
+          "class": "GPD",
+          "n_pos_rows": 3143,
+          "n_neg_rows": 17339,
+          "n_pos_patients": 65,
+          "n_neg_patients": 389,
+          "prevalence": 0.1534518113465482,
+          "point": 0.9242887755845207,
+          "ci_low": 0.8876436722925028,
+          "ci_high": 0.9521287029146257,
+          "status": "PASS",
+          "low_support": false
+        },
+        {
+          "class": "LRDA",
+          "n_pos_rows": 3137,
+          "n_neg_rows": 17345,
+          "n_pos_patients": 93,
+          "n_neg_patients": 379,
+          "prevalence": 0.153158871203984,
+          "point": 0.8019565617524238,
+          "ci_low": 0.751810003799089,
+          "ci_high": 0.8478709481702448,
+          "status": "PASS",
+          "low_support": false
+        },
+        {
+          "class": "GRDA",
+          "n_pos_rows": 3608,
+          "n_neg_rows": 16874,
+          "n_pos_patients": 140,
+          "n_neg_patients": 359,
+          "prevalence": 0.1761546723952739,
+          "point": 0.8989034613400431,
+          "ci_low": 0.872318179606519,
+          "ci_high": 0.9234942186349022,
+          "status": "PASS",
+          "low_support": false
+        },
+        {
+          "class": "Other",
+          "n_pos_rows": 3746,
+          "n_neg_rows": 16736,
+          "n_pos_patients": 239,
+          "n_neg_patients": 345,
+          "prevalence": 0.18289229567425055,
+          "point": 0.7784704417663099,
+          "ci_low": 0.7462030382084387,
+          "ci_high": 0.8079930160767779,
+          "status": "PASS",
+          "low_support": false
+        }
+      ],
+      "raw_comparator": [
+        {
+          "class": "Seizure",
+          "n_pos_rows": 4363,
+          "n_neg_rows": 16119,
+          "n_pos_patients": 191,
+          "n_neg_patients": 344,
+          "prevalence": 0.21301630700126942,
+          "point": 0.9159606915657396,
+          "ci_low": 0.8936591422288085,
+          "ci_high": 0.9355027525880764,
+          "status": "PASS",
+          "low_support": false
+        },
+        {
+          "class": "LPD",
+          "n_pos_rows": 2485,
+          "n_neg_rows": 17997,
+          "n_pos_patients": 52,
+          "n_neg_patients": 391,
+          "prevalence": 0.12132604237867396,
+          "point": 0.9050686404362722,
+          "ci_low": 0.8647780296186145,
+          "ci_high": 0.9353391646831732,
+          "status": "PASS",
+          "low_support": false
+        },
+        {
+          "class": "GPD",
+          "n_pos_rows": 3143,
+          "n_neg_rows": 17339,
+          "n_pos_patients": 65,
+          "n_neg_patients": 389,
+          "prevalence": 0.1534518113465482,
+          "point": 0.9317819205083662,
+          "ci_low": 0.8924740820575069,
+          "ci_high": 0.9602027780634146,
+          "status": "PASS",
+          "low_support": false
+        },
+        {
+          "class": "LRDA",
+          "n_pos_rows": 3137,
+          "n_neg_rows": 17345,
+          "n_pos_patients": 93,
+          "n_neg_patients": 379,
+          "prevalence": 0.153158871203984,
+          "point": 0.8141474380351201,
+          "ci_low": 0.7606031428576553,
+          "ci_high": 0.8602599704802587,
+          "status": "PASS",
+          "low_support": false
+        },
+        {
+          "class": "GRDA",
+          "n_pos_rows": 3608,
+          "n_neg_rows": 16874,
+          "n_pos_patients": 140,
+          "n_neg_patients": 359,
+          "prevalence": 0.1761546723952739,
+          "point": 0.9127099623477728,
+          "ci_low": 0.8887194300000629,
+          "ci_high": 0.9333117482549941,
+          "status": "PASS",
+          "low_support": false
+        },
+        {
+          "class": "Other",
+          "n_pos_rows": 3746,
+          "n_neg_rows": 16736,
+          "n_pos_patients": 239,
+          "n_neg_patients": 345,
+          "prevalence": 0.18289229567425055,
+          "point": 0.8160759462738585,
+          "ci_low": 0.7856845486734925,
+          "ci_high": 0.8449519764981603,
+          "status": "PASS",
+          "low_support": false
+        }
+      ]
+    },
+    "macro": {
+      "calibrated_candidate": 0.8609385033240362,
+      "calibrated_comparator": 0.8829697651376968,
+      "raw_candidate": 0.8603145450142282,
+      "raw_comparator": 0.8826240998611882
+    },
+    "bootstrap": {
+      "replicates": 2000,
+      "seed": 20260907,
+      "unit": "component"
+    }
+  },
+  "output_paths": [
+    "figures/v10_roc_curves.png",
+    "figures/v10_roc_curves.svg",
+    "figures/v10_roc_curves_raw.png",
+    "figures/v10_roc_curves_raw.svg"
+  ],
+  "private_output_paths": [],
+  "status": "PASS",
+  "reason": "",
+  "privacy_review": "aggregate_only; curves without point-level identifiers",
+  "caption": "One-vs-rest ROC curves. Partition: locked test, unique-majority rows only. Counts: rows 20,482 (tied maxima excluded: 823), patients 391, components 391; per-class positives/negatives in panel titles. Model/seed policy: deployment seed 101 for both methods (P solid, B3 dashed). Metric: one-vs-rest AUROC (rank-based; fast rank estimator inside the bootstrap); predicted score = class probability. Uncertainty: percentile 95% component-cluster bootstrap with 2000 resamples (seed 20260907); classes with fewer than 30 positive or negative patients are marked low support. Source hashes: source f74331b360f11c03; split 4455edaac7cb7e5d; preprocess 2406ce595fbd7457; cache af515c778666c076; protocol 380269a4a6db7334. Calibrated curves are the main output and raw-probability curves the companion; absent classes would be reported NOT_ESTIMABLE; the actual test class mix is used, no resampling of prevalence.",
+  "generated": "2026-09-06T19:55:18+00:00"
+}

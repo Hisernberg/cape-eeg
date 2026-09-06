@@ -1,0 +1,79 @@
+{
+  "figure_id": "V09",
+  "title": "Primary paired patient-KL improvement",
+  "question": "Is the proposed method better for the same held-out patients?",
+  "data_hashes": {
+    "protocol_lock": "b89876787fce3fa6",
+    "bootstrap_primary": "512b61f782dc88ce",
+    "predictions_P_s101": "5ffaa1b46b032301",
+    "predictions_B3_s101": "24b43afacff53d20",
+    "predictions_P_s202": "e80a7e6a4e33ad26",
+    "predictions_B3_s202": "e0a2b7fc77a0e6b3",
+    "predictions_P_s303": "1404e5f4820ac9dd",
+    "predictions_B3_s303": "dc38da84c0bfe85b"
+  },
+  "run_ids": [
+    "final_P_s101",
+    "final_P_s202",
+    "final_P_s303",
+    "final_B3_s101",
+    "final_B3_s202",
+    "final_B3_s303"
+  ],
+  "split": "test",
+  "n_rows": 21305,
+  "n_patients": 391,
+  "n_components": 391,
+  "generation_code_commit": null,
+  "parameters": {
+    "results": {
+      "primary_calibrated": {
+        "point_estimate": 0.06566447534470776,
+        "mean_a": 0.9341516111333128,
+        "mean_b": 0.868487135788605,
+        "ci_low": 0.033439957683243995,
+        "ci_high": 0.09730142284235661,
+        "n_groups": 391,
+        "n_seeds": 3,
+        "n_replicates": 2000,
+        "seed": 20260907,
+        "decision": "inferior",
+        "n_rows": 21305,
+        "n_patients": 391,
+        "n_components": 391
+      },
+      "secondary_raw": {
+        "point_estimate": 0.04848633697929583,
+        "mean_a": 0.9909526001047476,
+        "mean_b": 0.9424662631254518,
+        "ci_low": 0.005911340970150056,
+        "ci_high": 0.0898747671252094,
+        "n_groups": 391,
+        "n_seeds": 3,
+        "n_replicates": 2000,
+        "seed": 20260907,
+        "decision": "inferior",
+        "n_rows": 21305,
+        "n_patients": 391,
+        "n_components": 391
+      }
+    },
+    "candidate": "P",
+    "comparator": "B3",
+    "cross_checked_against_pipeline": true
+  },
+  "output_paths": [
+    "figures/v09_paired_delta_kl.png",
+    "figures/v09_paired_delta_kl.svg",
+    "figures/v09_paired_delta_kl_raw.png",
+    "figures/v09_paired_delta_kl_raw.svg"
+  ],
+  "private_output_paths": [
+    "$CAPE_ROOT/private/figures_private/v09_per_component_delta_calibrated.csv"
+  ],
+  "status": "PASS",
+  "reason": "",
+  "privacy_review": "aggregate_only; distribution and summary, no per-patient values in public outputs",
+  "caption": "Primary paired patient-KL improvement. Partition: locked test. Counts: rows 21,305, patients 391, independent components 391. Model/seed policy: seeds [101, 202, 303]: per-component mean KL averaged over seeds for each method (losses averaged, never probabilities). Metric: delta = P - B3 of component-mean KL(q || p) (natural log, eps 1e-7, temperature-calibrated on calibration-T); negative favours P. Uncertainty: percentile 95% interval from 2000 paired component bootstrap resamples (seed 20260907); point estimate +0.0657 [+0.0334, +0.0973], inferior. Source hashes: source f74331b360f11c03; split 4455edaac7cb7e5d; preprocess 2406ce595fbd7457; cache af515c778666c076; protocol 380269a4a6db7334. Raw-probability companion is secondary; no seed selection and no method-specific patient dropping; per-component values stay private.",
+  "generated": "2026-09-06T19:54:18+00:00"
+}

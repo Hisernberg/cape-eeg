@@ -1,0 +1,164 @@
+{
+  "figure_id": "V20",
+  "title": "Accuracy-resource Pareto and budget ledger",
+  "question": "Is predictive improvement worth the real DGX cost?",
+  "data_hashes": {
+    "protocol_lock": "b89876787fce3fa6",
+    "latency": "340276cf5b433527",
+    "resources": "4f7c6699af1051d9",
+    "eval_summary": "c33a22b1ac9ab623",
+    "predictions_P_s101": "5ffaa1b46b032301",
+    "predictions_P_s202": "e80a7e6a4e33ad26",
+    "predictions_P_s303": "1404e5f4820ac9dd",
+    "predictions_B3_s101": "24b43afacff53d20",
+    "predictions_B3_s202": "e0a2b7fc77a0e6b3",
+    "predictions_B3_s303": "dc38da84c0bfe85b"
+  },
+  "run_ids": [
+    "final_P_s101",
+    "final_P_s202",
+    "final_P_s303",
+    "final_B3_s101",
+    "final_B3_s202",
+    "final_B3_s303"
+  ],
+  "split": "test",
+  "n_rows": null,
+  "n_patients": null,
+  "n_components": 391,
+  "generation_code_commit": null,
+  "parameters": {
+    "points": {
+      "candidate": {
+        "method": "P",
+        "kl": 0.9341516111333128,
+        "ci_low": 0.8720545343009463,
+        "ci_high": 0.994546814750177,
+        "n_groups": 391,
+        "batch_32_median_ms": 2.622627500386443,
+        "batch_32_p95_ms": 3.0295443611976225,
+        "batch_1_median_ms": 1.359734007564839,
+        "batch_1_p95_ms": 1.3801140572468285,
+        "raw_to_prediction_median_ms": 44.53955050121294,
+        "examples_per_s": 12201.504024221822,
+        "params": 164134,
+        "device": "NVIDIA GB10",
+        "dtype": "bf16_autocast"
+      },
+      "comparator": {
+        "method": "B3",
+        "kl": 0.8684871357886048,
+        "ci_low": 0.800791962575086,
+        "ci_high": 0.9366829492645121,
+        "n_groups": 391,
+        "batch_32_median_ms": 1.8738479921012186,
+        "batch_32_p95_ms": 2.174221992027014,
+        "batch_1_median_ms": 1.5047665074234828,
+        "batch_1_p95_ms": 1.5318318030040246,
+        "raw_to_prediction_median_ms": 44.27430899522733,
+        "examples_per_s": 17077.158945063176,
+        "params": 1524150,
+        "device": "NVIDIA GB10",
+        "dtype": "bf16_autocast"
+      }
+    },
+    "ledger_rows": [
+      [
+        "GPU hours total (all jobs incl. failures)",
+        "0.72 of 12 h ceiling"
+      ],
+      [
+        "GPU jobs / failed or incomplete",
+        "17 / 0"
+      ],
+      [
+        "GPU hours: baselines",
+        "0.17 h"
+      ],
+      [
+        "GPU hours: ablations",
+        "0.36 h"
+      ],
+      [
+        "GPU hours: final",
+        "0.19 h"
+      ],
+      [
+        "Active cache (values + masks + metadata)",
+        "5.582 GB (cap 6.0; within cap: True)"
+      ],
+      [
+        "Alternate uniform local cache",
+        "1.859 GB"
+      ],
+      [
+        "Source bytes (read-only)",
+        "25.91 GB"
+      ],
+      [
+        "Cache conversion wall time",
+        "13.1 min"
+      ],
+      [
+        "Final fit P_s101: wall / peak CUDA / peak RSS / params",
+        "1.1 min / 0.44 GiB / 7.59 GiB / 164,134"
+      ],
+      [
+        "Final fit P_s202: wall / peak CUDA / peak RSS / params",
+        "1.4 min / 0.44 GiB / 7.57 GiB / 164,134"
+      ],
+      [
+        "Final fit P_s303: wall / peak CUDA / peak RSS / params",
+        "1.3 min / 0.44 GiB / 7.56 GiB / 164,134"
+      ],
+      [
+        "Final fit B3_s101: wall / peak CUDA / peak RSS / params",
+        "1.0 min / 0.43 GiB / 7.27 GiB / 1,524,150"
+      ],
+      [
+        "Final fit B3_s202: wall / peak CUDA / peak RSS / params",
+        "1.1 min / 0.43 GiB / 7.26 GiB / 1,524,150"
+      ],
+      [
+        "Final fit B3_s303: wall / peak CUDA / peak RSS / params",
+        "0.9 min / 0.43 GiB / 7.26 GiB / 1,524,150"
+      ],
+      [
+        "Final fit P_MSF_s101: wall / peak CUDA / peak RSS / params",
+        "1.5 min / 0.49 GiB / 7.57 GiB / 208,070"
+      ],
+      [
+        "Final fit P_MSF_s202: wall / peak CUDA / peak RSS / params",
+        "1.7 min / 0.49 GiB / 7.57 GiB / 208,070"
+      ],
+      [
+        "Final fit P_MSF_s303: wall / peak CUDA / peak RSS / params",
+        "1.4 min / 0.49 GiB / 7.57 GiB / 208,070"
+      ],
+      [
+        "Latency P: batch 1 / batch 32 / raw-to-prediction",
+        "1.36 ms (p95 1.38) / 2.62 ms (12202 ex/s) / 45 ms"
+      ],
+      [
+        "Latency B3: batch 1 / batch 32 / raw-to-prediction",
+        "1.50 ms (p95 1.53) / 1.87 ms (17077 ex/s) / 44 ms"
+      ],
+      [
+        "Energy",
+        "NOT_MEASURED (no credible power sensor boundary on the unified-memory system)"
+      ]
+    ]
+  },
+  "output_paths": [
+    "figures/v20_accuracy_resource_pareto.png",
+    "figures/v20_accuracy_resource_pareto.svg",
+    "figures/v20_accuracy_resource_pareto_ledger_table.png",
+    "figures/v20_accuracy_resource_pareto_ledger_table.svg"
+  ],
+  "private_output_paths": [],
+  "status": "PASS",
+  "reason": "",
+  "privacy_review": "aggregate_only; resource data with private paths redacted",
+  "caption": "Accuracy-resource Pareto and budget ledger. Partition: locked test for KL; latency benchmark on cached test tensors. Counts: components 391; latency: 100 timed batches after 20 warm-up batches per setting; final fits 9. Model/seed policy: KL averaged over seeds [101, 202, 303]; latency for the deployment seed 101 weights. Metric: patient-KL (calibrated) versus median batch-32 cached-tensor inference latency in ms (bar to p95) at fixed hardware, batch and dtype; companion table lists memory, storage, GPU hours including failed jobs and end-to-end raw-to-prediction latency separately. Uncertainty: KL: percentile 95% component bootstrap (2000 resamples, seed 20260907); latency: median and p95 of timed batches. Source hashes: source f74331b360f11c03; split 4455edaac7cb7e5d; preprocess 2406ce595fbd7457; cache af515c778666c076; protocol 380269a4a6db7334. Measurement boundary: forward pass on cached normalized tensors with CUDA synchronization; preprocessing is excluded from the plotted latency and reported separately; energy NOT_MEASURED (no credible power sensor boundary on the unified-memory system).",
+  "generated": "2026-09-06T19:56:44+00:00"
+}

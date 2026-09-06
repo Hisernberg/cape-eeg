@@ -1,0 +1,117 @@
+{
+  "figure_id": "V04",
+  "title": "Vote count and ambiguity distribution",
+  "question": "How are annotation effort and disagreement related?",
+  "data_hashes": {
+    "raw_votes": "466cad0aa7bb8633"
+  },
+  "run_ids": [],
+  "split": "all",
+  "n_rows": 106800,
+  "n_patients": 1950,
+  "n_components": 1950,
+  "generation_code_commit": null,
+  "parameters": {
+    "strata": {
+      "1": {
+        "n_rows": 4360,
+        "n_patients": 126,
+        "entropy": {
+          "patient_weighted_mean": 0.0,
+          "ci_low": 0.0,
+          "ci_high": 0.0,
+          "n_groups": 126,
+          "row_median": 0.0,
+          "row_mean": 0.0,
+          "max": -0.0
+        },
+        "disagreement": {
+          "status": "NOT_ESTIMABLE",
+          "reason": "single-vote rows have no pairwise disagreement",
+          "n_rows": 4360
+        }
+      },
+      "2-4": {
+        "n_rows": 57634,
+        "n_patients": 1765,
+        "entropy": {
+          "patient_weighted_mean": 0.09108928356871994,
+          "ci_low": 0.08147239341867865,
+          "ci_high": 0.09991480997102549,
+          "n_groups": 1765,
+          "row_median": 0.0,
+          "row_mean": 0.18585427875354643,
+          "max": 1.3862943611198906
+        },
+        "disagreement": {
+          "patient_weighted_mean": 0.10265099789574977,
+          "ci_low": 0.09174147100212128,
+          "ci_high": 0.11259296987638848,
+          "n_groups": 1765,
+          "row_median": 0.0,
+          "row_mean": 0.18825693167227678,
+          "max": 1.0
+        }
+      },
+      "5-9": {
+        "n_rows": 4860,
+        "n_patients": 344,
+        "entropy": {
+          "patient_weighted_mean": 0.4925155803952453,
+          "ci_low": 0.46228091232067386,
+          "ci_high": 0.5229949170529731,
+          "n_groups": 344,
+          "row_median": 0.6365141682948128,
+          "row_mean": 0.5753045438410507,
+          "max": 1.6094379124341005
+        },
+        "disagreement": {
+          "patient_weighted_mean": 0.39628994653469274,
+          "ci_low": 0.37190744171445195,
+          "ci_high": 0.42040326419965857,
+          "n_groups": 344,
+          "row_median": 0.5333333333333333,
+          "row_mean": 0.4519684499314129,
+          "max": 1.0
+        }
+      },
+      "10+": {
+        "n_rows": 39946,
+        "n_patients": 1063,
+        "entropy": {
+          "patient_weighted_mean": 0.5941565249317229,
+          "ci_low": 0.5733281711340885,
+          "ci_high": 0.61491307929515,
+          "n_groups": 1063,
+          "row_median": 0.6909233093138181,
+          "row_mean": 0.7030843808955529,
+          "max": 1.754105330999288
+        },
+        "disagreement": {
+          "patient_weighted_mean": 0.3734070079638396,
+          "ci_low": 0.3601355719273828,
+          "ci_high": 0.3863053467752283,
+          "n_groups": 1063,
+          "row_median": 0.5,
+          "row_mean": 0.4432971353705971,
+          "max": 0.875
+        }
+      }
+    },
+    "bootstrap": {
+      "replicates": 2000,
+      "seed": 20260907,
+      "unit": "patient"
+    }
+  },
+  "output_paths": [
+    "figures/v04_vote_ambiguity.png",
+    "figures/v04_vote_ambiguity.svg"
+  ],
+  "private_output_paths": [],
+  "status": "PASS",
+  "reason": "",
+  "privacy_review": "aggregate_only; no label ids",
+  "caption": "Vote count and ambiguity distribution. Partition: all partitions pooled (label-only intake statistics). Counts: rows 106,800, patients 1,950; per-band rows and patients under each tick; single-vote rows 4,360. Model/seed policy: no model; expert votes only. Metric: target entropy H(q) = -sum q_k ln q_k (nats) and pairwise disagreement d = 1 - sum v_k(v_k-1)/(n(n-1)), undefined for n = 1. Uncertainty: patient-weighted mean with 2,000-replicate percentile patient-cluster bootstrap (seed 20260907). Source hashes: source f74331b360f11c03; split 4455edaac7cb7e5d; preprocess 2406ce595fbd7457; cache af515c778666c076; protocol 380269a4a6db7334. Bands 1, 2-4, 5-9, 10+ match the evaluation protocol; n = 1 is shown as NOT_ESTIMABLE, never as zero disagreement.",
+  "generated": "2026-09-06T19:54:16+00:00"
+}

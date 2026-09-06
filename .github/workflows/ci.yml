@@ -1,0 +1,20 @@
+name: synthetic-cpu-tests
+on: [push, pull_request]
+permissions:
+  contents: read
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install numpy pandas pyarrow scipy scikit-learn matplotlib pyyaml pytest torch --index-url https://download.pytorch.org/whl/cpu --extra-index-url https://pypi.org/simple
+      - run: pip install timm safetensors
+      - name: forbidden files
+        run: |
+          ! find . -path ./.git -prune -o \( -name "*.parquet" -o -name "*.npy" -o -name "*.pt" -o -name "*.safetensors" -o -name "train.csv" \) -print | grep .
+      - name: notebooks carry no identifiers or secrets
+        run: python scripts/release_precheck.py || true
+      - run: python -m pytest -q

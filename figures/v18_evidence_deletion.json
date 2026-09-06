@@ -1,0 +1,140 @@
+{
+  "figure_id": "V18",
+  "title": "Evidence deletion and region dependence",
+  "question": "Does claimed important evidence actually affect the prediction?",
+  "data_hashes": {
+    "protocol_lock": "b89876787fce3fa6",
+    "robustness_evidence": "a5621918a5a51323"
+  },
+  "run_ids": [
+    "final_P_s101"
+  ],
+  "split": "test",
+  "n_rows": 21305,
+  "n_patients": 391,
+  "n_components": null,
+  "generation_code_commit": null,
+  "parameters": {
+    "view_region_deletion": {
+      "intact": {
+        "kl": 0.9234728514977225,
+        "delta_kl": 0.0,
+        "ci_low": 0.0,
+        "ci_high": 0.0,
+        "js_distance": 0.0,
+        "label_flip_fraction": 0.0
+      },
+      "local_removed": {
+        "kl": 1.3315400660207262,
+        "delta_kl": 0.40806721452300365,
+        "ci_low": 0.3491051535341664,
+        "ci_high": 0.46642700637269513,
+        "js_distance": 0.21958118919667274,
+        "label_flip_fraction": 0.3154189157474771
+      },
+      "context_removed": {
+        "kl": 1.0138327954614743,
+        "delta_kl": 0.0903599439637518,
+        "ci_low": 0.056954607626903526,
+        "ci_high": 0.12863865685811118,
+        "js_distance": 0.18050136343491613,
+        "label_flip_fraction": 0.28800750997418445
+      },
+      "region_removed_LL": {
+        "kl": 1.0202325387205011,
+        "delta_kl": 0.09675968722277861,
+        "ci_low": 0.05466088165985847,
+        "ci_high": 0.13900090731103426,
+        "js_distance": 0.198862988989732,
+        "label_flip_fraction": 0.3289368692795119
+      },
+      "region_removed_RL": {
+        "kl": 1.0400797528634225,
+        "delta_kl": 0.11660690136569996,
+        "ci_low": 0.07753928314484795,
+        "ci_high": 0.15373469867298256,
+        "js_distance": 0.21598133958420948,
+        "label_flip_fraction": 0.36667448955644216
+      },
+      "region_removed_LP": {
+        "kl": 1.1270505033235032,
+        "delta_kl": 0.2035776518257807,
+        "ci_low": 0.1555731361789554,
+        "ci_high": 0.2532187104005775,
+        "js_distance": 0.2375365699843088,
+        "label_flip_fraction": 0.4253461628725651
+      },
+      "region_removed_RP": {
+        "kl": 0.9890097212757596,
+        "delta_kl": 0.06553686977803708,
+        "ci_low": 0.03059316536017059,
+        "ci_high": 0.09921448341733834,
+        "js_distance": 0.1771432055363438,
+        "label_flip_fraction": 0.30246421027927717
+      }
+    },
+    "ranked_vs_random": {
+      "fractions": [
+        0.0,
+        0.1,
+        0.2,
+        0.3,
+        0.5,
+        0.7,
+        0.9
+      ],
+      "ranked": {
+        "kl": [
+          0.8035167455673218,
+          0.913787841796875,
+          0.9360780715942383,
+          1.082319736480713,
+          1.1266231536865234,
+          1.15138840675354,
+          1.2621667385101318
+        ],
+        "js": [
+          0.0,
+          0.10801737826824942,
+          0.13714657949312653,
+          0.15543794376847633,
+          0.19044323919924536,
+          0.21948950653614108,
+          0.285807543693101
+        ]
+      },
+      "random": {
+        "kl": [
+          0.8035167455673218,
+          0.8737344741821289,
+          0.9237154722213745,
+          1.005030632019043,
+          1.0663068294525146,
+          1.1167757511138916,
+          1.167271375656128
+        ],
+        "js": [
+          0.0,
+          0.10092219264908163,
+          0.12502030924665125,
+          0.15254674792309206,
+          0.1963572090504834,
+          0.2384416191134593,
+          0.2817735647923717
+        ]
+      },
+      "n_cases": 48,
+      "baseline_kl": 0.803516685962677
+    }
+  },
+  "output_paths": [
+    "figures/v18_evidence_deletion.png",
+    "figures/v18_evidence_deletion.svg"
+  ],
+  "private_output_paths": [],
+  "status": "PASS",
+  "reason": "",
+  "privacy_review": "aggregate_only; no case-level maps",
+  "caption": "Evidence deletion and region dependence. Partition: locked test (view/region deletion on every test row; ranked-vs-random curves on the prespecified case set). Counts: rows 21,305, patients 391; 48 cases selected by class and entropy rules (no outcome-based selection). Model/seed policy: deployment seed 101, P only. Metric: change in patient-weighted calibrated KL, Jensen-Shannon distance and label-flip fraction after deleting a view or a region; KL/JS versus the fraction of local blocks deleted in saliency-ranked versus random order with the same masked area. Uncertainty: paired 95% percentile component-cluster bootstrap for panel (a); panels (b)-(c) report case means without an interval (the pipeline stores means only; exploratory, case count limited). Source hashes: source f74331b360f11c03; split 4455edaac7cb7e5d; preprocess 2406ce595fbd7457; cache af515c778666c076; protocol 380269a4a6db7334. A ranked curve above the random curve indicates the ranking predicts deletion effects; this does not establish a biological cause; individual case maps require separate approval.",
+  "generated": "2026-09-06T19:56:43+00:00"
+}

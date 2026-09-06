@@ -1,0 +1,123 @@
+{
+  "figure_id": "V06",
+  "title": "Missingness and signal-quality audit",
+  "question": "Does data quality differ across partitions or dominate errors?",
+  "data_hashes": {
+    "row_quality": "a7a3180555d115db",
+    "row_index": "466cad0aa7bb8633",
+    "cache_manifest": "5b5939562f194525",
+    "strata": "6563dae483c53938",
+    "protocol_lock": "b89876787fce3fa6"
+  },
+  "run_ids": [],
+  "split": "all",
+  "n_rows": 106800,
+  "n_patients": 1950,
+  "n_components": null,
+  "generation_code_commit": null,
+  "parameters": {
+    "per_partition": {
+      "train": {
+        "rows": 64292,
+        "patients": 1170,
+        "mean_local_valid_fraction": 0.999569347663784,
+        "mean_context_valid_fraction": 0.982872091395508,
+        "local_fully_valid_share": 0.9979002053132583,
+        "context_fully_valid_share": 0.932542151434082,
+        "local_all_invalid_rows": 0,
+        "context_all_invalid_rows": 1,
+        "both_all_invalid_rows": 0,
+        "local_lt_0.95_share": 0.0019598083742922916,
+        "context_lt_0.95_share": 0.05835873825670379
+      },
+      "tune": {
+        "rows": 10667,
+        "patients": 196,
+        "mean_local_valid_fraction": 0.9997304771725883,
+        "mean_context_valid_fraction": 0.9821323943001781,
+        "local_fully_valid_share": 0.998218805662323,
+        "context_fully_valid_share": 0.9291272147745383,
+        "local_all_invalid_rows": 0,
+        "context_all_invalid_rows": 0,
+        "both_all_invalid_rows": 0,
+        "local_lt_0.95_share": 0.0014999531264647979,
+        "context_lt_0.95_share": 0.06196681353707697
+      },
+      "calibration_t": {
+        "rows": 5289,
+        "patients": 95,
+        "mean_local_valid_fraction": 0.999568680279826,
+        "mean_context_valid_fraction": 0.9779347466439781,
+        "local_fully_valid_share": 0.9969748534694649,
+        "context_fully_valid_share": 0.9109472490073738,
+        "local_all_invalid_rows": 0,
+        "context_all_invalid_rows": 0,
+        "both_all_invalid_rows": 0,
+        "local_lt_0.95_share": 0.0028360748723766306,
+        "context_lt_0.95_share": 0.08262431461523917
+      },
+      "calibration_p": {
+        "rows": 5247,
+        "patients": 98,
+        "mean_local_valid_fraction": 0.9998808843148466,
+        "mean_context_valid_fraction": 0.9835263007432818,
+        "local_fully_valid_share": 0.9988564894225271,
+        "context_fully_valid_share": 0.92757766342672,
+        "local_all_invalid_rows": 0,
+        "context_all_invalid_rows": 0,
+        "both_all_invalid_rows": 0,
+        "local_lt_0.95_share": 0.000952925481227368,
+        "context_lt_0.95_share": 0.06308366685725177
+      },
+      "test": {
+        "rows": 21305,
+        "patients": 391,
+        "mean_local_valid_fraction": 0.9995452945318001,
+        "mean_context_valid_fraction": 0.9785078326683877,
+        "local_fully_valid_share": 0.9975123210513964,
+        "context_fully_valid_share": 0.920535085660643,
+        "local_all_invalid_rows": 0,
+        "context_all_invalid_rows": 0,
+        "both_all_invalid_rows": 0,
+        "local_lt_0.95_share": 0.0022999295939920205,
+        "context_lt_0.95_share": 0.07148556676836423
+      }
+    },
+    "quality_vs_kl": {
+      "valid_fraction_lt_0.95": {
+        "delta": 0.11901962824397172,
+        "ci_low": 0.028494085523937007,
+        "ci_high": 0.20589171162052322,
+        "n_rows": 1523,
+        "n_groups": 134,
+        "kl_candidate": 1.0363266366758066,
+        "kl_comparator": 0.917307008431835,
+        "status": "PASS",
+        "low_support": false
+      },
+      "valid_fraction_ge_0.95": {
+        "delta": 0.06432076866814973,
+        "ci_low": 0.029729102324166524,
+        "ci_high": 0.09609636917919324,
+        "n_rows": 19782,
+        "n_groups": 381,
+        "kl_candidate": 0.9174615386957157,
+        "kl_comparator": 0.8531407700275659,
+        "status": "PASS",
+        "low_support": false
+      }
+    }
+  },
+  "output_paths": [
+    "figures/v06_missingness_quality.png",
+    "figures/v06_missingness_quality.svg",
+    "figures/v06_missingness_quality_quality_vs_kl.png",
+    "figures/v06_missingness_quality_quality_vs_kl.svg"
+  ],
+  "private_output_paths": [],
+  "status": "PASS",
+  "reason": "",
+  "privacy_review": "aggregate_only; per-example quality private",
+  "caption": "Missingness and signal-quality audit. Partition: all partitions (intake audit); locked test for the quality-band companion. Counts: rows 106,800, patients 1,950; per-partition rows and patients in the table. Model/seed policy: no model for (a)-(c); three-seed mean for the companion. Metric: fraction of valid time-frequency cells per view (cache validity mask); rows with an entirely invalid view. Uncertainty: none for intake counts; paired 2,000-replicate component bootstrap for the companion. Source hashes: source f74331b360f11c03; split 4455edaac7cb7e5d; preprocess 2406ce595fbd7457; cache af515c778666c076; protocol 380269a4a6db7334. Quality/outcome associations on the locked test are never used to change exclusion rules; per-example quality data stay private.",
+  "generated": "2026-09-06T19:54:17+00:00"
+}

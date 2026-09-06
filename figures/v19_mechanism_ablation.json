@@ -1,0 +1,144 @@
+{
+  "figure_id": "V19",
+  "title": "Mechanism-ablation effect plot",
+  "question": "Which change contributes beyond extra parameters or favorable preprocessing?",
+  "data_hashes": {
+    "development_table": "da5411df1085355a",
+    "protocol_lock": "b89876787fce3fa6",
+    "bootstrap_primary": "512b61f782dc88ce"
+  },
+  "run_ids": [
+    "dev_A1_s101_4455edaa_2406ce59_cb621ea3",
+    "dev_A2_s101_4455edaa_2406ce59_0a1ef11a",
+    "dev_B2_s101_4455edaa_2406ce59_56b0bff3",
+    "dev_B3_s101_4455edaa_2406ce59_1468c89c",
+    "dev_B3_s101_4455edaa_2406ce59_35e6013c",
+    "dev_P_MSF_s101_4455edaa_2406ce59_4611f609",
+    "dev_P_s101_4455edaa_2406ce59_385fb705",
+    "dev_P_s101_4455edaa_2406ce59_c6dac984",
+    "dev_cpu_baselines_4455edaa_2406ce59"
+  ],
+  "split": "tune/test",
+  "n_rows": null,
+  "n_patients": null,
+  "n_components": null,
+  "generation_code_commit": null,
+  "parameters": {
+    "comparisons": [
+      {
+        "name": "Foveated local bins (A1 - B2)",
+        "status": "PASS",
+        "delta": 0.014835440034158709,
+        "min": 0.014835440034158709,
+        "max": 0.014835440034158709,
+        "n_seeds": 1,
+        "seeds": [
+          101
+        ],
+        "a": "A1",
+        "b": "B2",
+        "scope": "development (tune)"
+      },
+      {
+        "name": "Learned view gate (A2 - A1)",
+        "status": "PASS",
+        "delta": -0.010765736118359515,
+        "min": -0.010765736118359515,
+        "max": -0.010765736118359515,
+        "n_seeds": 1,
+        "seeds": [
+          101
+        ],
+        "a": "A2",
+        "b": "A1",
+        "scope": "development (tune)"
+      },
+      {
+        "name": "Disagreement auxiliary loss (P - A2)",
+        "status": "PASS",
+        "delta": -0.03540129621891169,
+        "min": -0.06333714817340963,
+        "max": -0.007465444264413756,
+        "n_seeds": 1,
+        "seeds": [
+          101
+        ],
+        "a": "P",
+        "b": "A2",
+        "scope": "development (tune)"
+      },
+      {
+        "name": "All three combined (P - B2)",
+        "status": "PASS",
+        "delta": -0.0313315923031125,
+        "min": -0.059267444257610435,
+        "max": -0.003395740348614562,
+        "n_seeds": 1,
+        "seeds": [
+          101
+        ],
+        "a": "P",
+        "b": "B2",
+        "scope": "development (tune)"
+      },
+      {
+        "name": "Pretrained MobileNetV3 reference (B3 - B2)",
+        "status": "PASS",
+        "delta": -0.07498884559904673,
+        "min": -0.09034798679710143,
+        "max": -0.05962970440099202,
+        "n_seeds": 1,
+        "seeds": [
+          101
+        ],
+        "a": "B3",
+        "b": "B2",
+        "scope": "development (tune)"
+      },
+      {
+        "name": "Exploratory multi-scale fusion (P_MSF - P)",
+        "status": "PASS",
+        "delta": 0.032643411183568116,
+        "min": 0.0047075592290701795,
+        "max": 0.06057926313806605,
+        "n_seeds": 1,
+        "seeds": [
+          101
+        ],
+        "a": "P_MSF",
+        "b": "P",
+        "scope": "development (tune)"
+      },
+      {
+        "name": "Frozen final comparison (P - B3), locked test",
+        "status": "PASS",
+        "delta": 0.06566447534470776,
+        "ci_low": 0.033439957683243995,
+        "ci_high": 0.09730142284235661,
+        "n_seeds": 3,
+        "scope": "confirmatory (test)",
+        "n_groups": 391
+      }
+    ],
+    "configs_available": [
+      "A1",
+      "A2",
+      "B0",
+      "B1",
+      "B2",
+      "B3",
+      "P",
+      "P_MSF"
+    ]
+  },
+  "output_paths": [
+    "figures/v19_mechanism_ablation.png",
+    "figures/v19_mechanism_ablation.svg"
+  ],
+  "private_output_paths": [],
+  "status": "PASS",
+  "reason": "",
+  "privacy_review": "aggregate_only; exact config ids only",
+  "caption": "Mechanism-ablation effect plot. Partition: tune for development ablations; locked test for the frozen final comparison. Counts: 7 estimable comparisons of 7; seeds per comparison at the right margin. Model/seed policy: seed-matched differences at the default learning rate; single-seed pilots carry no invented interval. Metric: difference of tune patient-mean KL between configurations sharing cache bytes and training exposure (B2 uniform control -> A1 foveation -> A2 gate -> P auxiliary loss). Uncertainty: development: min-max over matched seeds only (no bootstrap; exploratory); final comparison: percentile 95% paired component bootstrap. Source hashes: source f74331b360f11c03; split 4455edaac7cb7e5d; preprocess 2406ce595fbd7457; cache af515c778666c076; protocol 380269a4a6db7334. Ablations that made results worse are shown with the same rule as improvements; pilot effects are not called confirmatory.",
+  "generated": "2026-09-06T19:56:43+00:00"
+}

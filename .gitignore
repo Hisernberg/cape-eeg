@@ -1,0 +1,23 @@
+# patient-derived artefacts, caches, checkpoints and credentials never enter the repository
+private/
+scratch/
+*.parquet
+*.npy
+*.pt
+*.safetensors
+*.zip
+*.log
+*.pkl
+__pycache__/
+.pytest_cache/
+.ipynb_checkpoints/
+*.egg-info/
+.env
+train.csv
+test.csv
+sample_submission.csv
+train_eegs/
+train_spectrograms/
+test_eegs/
+test_spectrograms/
+example_figures/

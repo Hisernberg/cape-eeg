@@ -1,0 +1,274 @@
+{
+  "figure_id": "V03",
+  "title": "Six-class label distribution",
+  "question": "How much evidence supports each label and partition?",
+  "data_hashes": {
+    "raw_votes": "466cad0aa7bb8633"
+  },
+  "run_ids": [],
+  "split": "all",
+  "n_rows": 106800,
+  "n_patients": 1950,
+  "n_components": 1950,
+  "generation_code_commit": null,
+  "parameters": {
+    "class_order": [
+      "Seizure",
+      "LPD",
+      "GPD",
+      "LRDA",
+      "GRDA",
+      "Other"
+    ],
+    "per_partition": {
+      "train": {
+        "rows": 64292,
+        "patients": 1170,
+        "share": [
+          0.20029318098510354,
+          0.1406618960382007,
+          0.1314397908559623,
+          0.13683308973178873,
+          0.17879643269544837,
+          0.21197560969349633
+        ],
+        "share_patients": [
+          652,
+          247,
+          238,
+          330,
+          650,
+          829
+        ],
+        "majority": [
+          11339,
+          8289,
+          9921,
+          9025,
+          11134,
+          10854
+        ],
+        "majority_patients": [
+          600,
+          72,
+          62,
+          115,
+          395,
+          658
+        ],
+        "raw_vote_share": [
+          0.1253816224021821,
+          0.13969051258852525,
+          0.16361517308386556,
+          0.14258972861911745,
+          0.16182572614107885,
+          0.2668972371652308
+        ],
+        "total_votes": 448742,
+        "ties": 3730,
+        "tie_patients": 223
+      },
+      "tune": {
+        "rows": 10667,
+        "patients": 196,
+        "share": [
+          0.22591860509021547,
+          0.11638227902280893,
+          0.12473096338588449,
+          0.14330713605950432,
+          0.17850419762068578,
+          0.211156818820901
+        ],
+        "share_patients": [
+          115,
+          98,
+          70,
+          104,
+          131,
+          148
+        ],
+        "majority": [
+          2288,
+          1158,
+          1450,
+          1573,
+          1849,
+          2047
+        ],
+        "majority_patients": [
+          87,
+          43,
+          32,
+          39,
+          63,
+          115
+        ],
+        "raw_vote_share": [
+          0.10892185589368525,
+          0.17848326142629722,
+          0.19594859608241239,
+          0.12048081581800983,
+          0.1287174399557022,
+          0.2674480308238931
+        ],
+        "total_votes": 86686,
+        "ties": 302,
+        "tie_patients": 52
+      },
+      "calibration_t": {
+        "rows": 5289,
+        "patients": 95,
+        "share": [
+          0.2241953847464174,
+          0.11756805182825335,
+          0.1179061985070293,
+          0.139594352444274,
+          0.1768430411648022,
+          0.22389297130922367
+        ],
+        "share_patients": [
+          64,
+          46,
+          34,
+          45,
+          61,
+          73
+        ],
+        "majority": [
+          1155,
+          492,
+          756,
+          767,
+          856,
+          1044
+        ],
+        "majority_patients": [
+          52,
+          20,
+          20,
+          17,
+          40,
+          49
+        ],
+        "raw_vote_share": [
+          0.10954342078503153,
+          0.18308928208257066,
+          0.16964104128533658,
+          0.13661785641651414,
+          0.1216697173073012,
+          0.2794386821232459
+        ],
+        "total_votes": 39336,
+        "ties": 219,
+        "tie_patients": 26
+      },
+      "calibration_p": {
+        "rows": 5247,
+        "patients": 98,
+        "share": [
+          0.21438770936509138,
+          0.1143038397360416,
+          0.1251696670527555,
+          0.14385032941596446,
+          0.1718090213877723,
+          0.2304794330423748
+        ],
+        "share_patients": [
+          61,
+          41,
+          41,
+          44,
+          61,
+          69
+        ],
+        "majority": [
+          1092,
+          604,
+          704,
+          735,
+          821,
+          1117
+        ],
+        "majority_patients": [
+          50,
+          16,
+          22,
+          15,
+          32,
+          56
+        ],
+        "raw_vote_share": [
+          0.10769076757514327,
+          0.17080861926571064,
+          0.2061466076031734,
+          0.10966789298495883,
+          0.11812698651049879,
+          0.28755912606051504
+        ],
+        "total_votes": 39957,
+        "ties": 174,
+        "tie_patients": 27
+      },
+      "test": {
+        "rows": 21305,
+        "patients": 391,
+        "share": [
+          0.21828833828397332,
+          0.12222133925639958,
+          0.125132821997867,
+          0.1416025790227434,
+          0.18364181646850325,
+          0.20911310497051347
+        ],
+        "share_patients": [
+          217,
+          158,
+          140,
+          197,
+          246,
+          298
+        ],
+        "majority": [
+          4363,
+          2485,
+          3143,
+          3137,
+          3608,
+          3746
+        ],
+        "majority_patients": [
+          191,
+          52,
+          65,
+          93,
+          140,
+          239
+        ],
+        "raw_vote_share": [
+          0.12146772723299577,
+          0.18379681080878588,
+          0.18591336488393292,
+          0.10671428393042219,
+          0.1238652398136933,
+          0.27824257333016994
+        ],
+        "total_votes": 160166,
+        "ties": 823,
+        "tie_patients": 97
+      }
+    },
+    "small_cell_threshold": 10
+  },
+  "output_paths": [
+    "figures/v03_label_distribution_vote_mass.png",
+    "figures/v03_label_distribution_vote_mass.svg",
+    "figures/v03_label_distribution_majority_counts.png",
+    "figures/v03_label_distribution_majority_counts.svg"
+  ],
+  "private_output_paths": [],
+  "status": "PASS",
+  "reason": "",
+  "privacy_review": "aggregate_only; suppressed low-count cells; no identifiers",
+  "caption": "Six-class label distribution. Partition: all five partitions, one panel each. Counts: rows 106,800, patients 1,950, components 1,950; per-panel rows and patients in titles; per-bar labels give patients contributing to the class. Model/seed policy: no model; expert votes only. Metric: (a) share of normalized vote mass sum_i q_ik / rows (each row weighted equally, so it differs from the raw vote-count share sum_i v_ik / sum_i n_i recorded in the sidecar); (b) rows whose unique maximum vote is class k, tied maxima counted separately. Uncertainty: none (descriptive counts); patient counts reported alongside every estimate. Source hashes: source f74331b360f11c03; split 4455edaac7cb7e5d; preprocess 2406ce595fbd7457; cache af515c778666c076; protocol 380269a4a6db7334. Class order fixed as Seizure, LPD, GPD, LRDA, GRDA, Other; vote mass sums to the row count (106800.0); cells with fewer than 10 patients are hatched and marked s.",
+  "generated": "2026-09-06T19:54:15+00:00"
+}
