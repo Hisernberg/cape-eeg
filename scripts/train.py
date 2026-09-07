@@ -21,7 +21,7 @@ from cape_eeg.training.engine import fit, DEFAULT_TRAINING
 from cape_eeg.training.supervisor import Supervisor, GpuLock, GpuLedger
 
 ap = argparse.ArgumentParser()
-ap.add_argument("--config", required=True, choices=list(CONFIGS) + ["B3"])
+ap.add_argument("--config", required=True, choices=list(CONFIGS) + ["B3", "B3S", "B3H"])
 ap.add_argument("--phase", default="dev", choices=["dev", "final", "smoke"])
 ap.add_argument("--seed", type=int, default=101)
 ap.add_argument("--epochs", type=int, default=None)
@@ -58,7 +58,8 @@ train_ds = CacheDataset(reader, train_rows, normalizer); tune_ds = CacheDataset(
 cfg = dict(DEFAULT_TRAINING)
 cfg["compact_lr"] *= a.lr_mult; cfg["head_lr"] *= a.lr_mult; cfg["pretrained_backbone_lr"] *= a.lr_mult
 if a.batch: cfg["physical_batch"] = a.batch
-if a.config == "B3": cfg["frozen_backbone_epochs"] = 1
+if a.config in ("B3", "B3H"): cfg["frozen_backbone_epochs"] = 1
+if a.config == "B3S": cfg["pretrained_backbone_lr"] = cfg["head_lr"]  # no pretrained features to protect: one learning rate
 epochs = a.epochs or cfg["max_epochs"]
 cfg_for_id = {**cfg, "epochs": epochs, "config": a.config, "phase": a.phase, "encoding": encoding, "train_parts": train_parts, "tag": a.tag}
 rid = make_run_id(a.phase, a.config, a.seed, split_hash, phash, cfg_for_id)

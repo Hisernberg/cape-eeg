@@ -1,0 +1,103 @@
+{
+  "created": "2026-09-06T19:33:35+00:00",
+  "git_commit": null,
+  "split_hash": "4455edaac7cb7e5d",
+  "preprocess_hash": "2406ce595fbd7457",
+  "n_development_configs": 8,
+  "comparator": "B3",
+  "comparator_run": "dev_B3_s101_4455edaa_2406ce59_1468c89c",
+  "comparator_tune_patient_kl": 0.9266079403599992,
+  "candidate": "P",
+  "candidate_run": "dev_P_s101_4455edaa_2406ce59_385fb705",
+  "candidate_tune_patient_kl": 0.9269702005033807,
+  "candidate_lr_mult": 1.0,
+  "comparator_lr_mult": 1.0,
+  "final_epochs": 3,
+  "schedule_matched_selection": true,
+  "selection_rule": "best tune patient-KL among PASS runs trained with the complete final schedule",
+  "development_paired_sd": 0.5828248464267539,
+  "development_paired_mean": 0.0003622601433815739,
+  "n_tune_components": 196,
+  "mde_test_at_dev_sd": 0.08257593816475568,
+  "n_test_components": 391,
+  "mde_scenarios": {
+    "0.1": 0.014168225440459727,
+    "0.2": 0.028336450880919455,
+    "0.3": 0.04250467632137918
+  },
+  "referral_score_aurc_tune": {
+    "entropy": 0.40165391885181373,
+    "one_minus_max": 0.4067163478291615,
+    "d_hat": 0.43546556562097605
+  },
+  "referral_score": "entropy",
+  "target_entropy_tertiles": [
+    0.0,
+    0.6210863745552451
+  ],
+  "primary_metric": "three_seed_mean_component_KL_difference (P - comparator), natural log, eps 1e-7, 2000 paired component bootstrap, seed 20260907",
+  "primary_on": "temperature_calibrated_predictions (raw reported as secondary)",
+  "final_seeds": [
+    101,
+    202,
+    303
+  ],
+  "deployment_seed": 101,
+  "final_refit_partitions": [
+    "train",
+    "tune"
+  ],
+  "temperature_partition": "calibration_t",
+  "referral_partition": "calibration_p",
+  "referral_coverages": [
+    0.8,
+    0.9,
+    0.95
+  ],
+  "vote_strata": [
+    "1",
+    "2-4",
+    "5-9",
+    "10+"
+  ],
+  "corruption_conditions": [
+    "clean",
+    "region_missing_LL",
+    "time_mask_10pct",
+    "gain_shift_mild",
+    "gain_shift_strong",
+    "stft_window_512"
+  ],
+  "robustness_subset": {
+    "max_rows": 1024,
+    "min_patients": 100,
+    "seed": 20260907
+  },
+  "figures": [
+    "V01",
+    "V02",
+    "V03",
+    "V04",
+    "V05",
+    "V06",
+    "V07",
+    "V08",
+    "V09",
+    "V10",
+    "V11",
+    "V12",
+    "V13",
+    "V14",
+    "V15",
+    "V16",
+    "V17",
+    "V18",
+    "V19",
+    "V20"
+  ],
+  "exploratory_configs": [
+    "P_MSF"
+  ],
+  "notes": "Hypothesis: superiority of P over the tune-selected comparator on patient/component-mean KL. Interval crossing zero is inconclusive. No noninferiority margin.",
+  "protocol_hash": "380269a4a6db7334"
+}

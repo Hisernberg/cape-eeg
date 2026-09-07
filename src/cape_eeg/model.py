@@ -140,6 +140,8 @@ DESCRIPTIONS = {
     "B1": "CPU band-power soft-label logistic regression",
     "B2": "compact trunk, uniform local bins, fixed 50:50 fusion, no auxiliary head (byte-matched control)",
     "B3": "timm MobileNetV3-Small (ImageNet, 4-channel adaptation) on the same cached evidence",
+    "B3S": "MobileNetV3-Small trained from scratch (no ImageNet weights); post-lock development control for the pretraining confound",
+    "B3H": "MobileNetV3-Small width 0.5 (ImageNet, 4-channel adaptation); post-lock development control for the scale confound",
     "A1": "B2 + foveated local bins",
     "A2": "A1 + learned gate (auxiliary loss off)",
     "P": "A2 + disagreement auxiliary loss (full prespecified candidate)",
@@ -148,7 +150,11 @@ DESCRIPTIONS = {
 
 
 def build_model(config_id: str) -> nn.Module:
-    if config_id == "B3":
+    if config_id in ("B3", "B3S", "B3H"):
         from .baselines import MobileNetV3Comparator
+        if config_id == "B3S":
+            return MobileNetV3Comparator(pretrained=False)
+        if config_id == "B3H":
+            return MobileNetV3Comparator(pretrained=True, variant="mobilenetv3_small_050.lamb_in1k")
         return MobileNetV3Comparator()
     return CAPEModel(**CONFIGS[config_id])

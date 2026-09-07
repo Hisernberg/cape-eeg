@@ -8,9 +8,9 @@ export HMS_DATA_ROOT="${HMS_DATA_ROOT:-$CAPE_ROOT}"
 export PYTHONWARNINGS=ignore
 CONFIGS="${CONFIGS:-B2 B3 A1 A2 P P_MSF}"
 SEED="${SEED:-101}"; EPOCHS="${EPOCHS:-12}"; LRMULT="${LRMULT:-1.0}"; TAG="${TAG:-}"
-echo "== CPU baselines"; python3 scripts/run_baselines_cpu.py 2>&1 | grep -vE "Warning|warn|Found GPU|Minimum and|\(8.0\)|^\s*$" || true
+if [ "${SKIP_CPU_BASELINES:-0}" != "1" ]; then echo "== CPU baselines"; python3 scripts/run_baselines_cpu.py 2>&1 | grep -vE "Warning|warn|Found GPU|Minimum and|\(8.0\)|^\s*$" || true; fi
 for cfg in $CONFIGS; do
-  case $cfg in B2|B3) stage=baselines;; *) stage=ablations;; esac
+  case $cfg in B2|B3) stage=baselines;; B3S|B3H) stage=post_lock_controls;; *) stage=ablations;; esac
   echo "== train $cfg (seed $SEED, epochs $EPOCHS, lr x$LRMULT)"
   python3 scripts/train.py --config "$cfg" --phase dev --seed "$SEED" --epochs "$EPOCHS" --lr-mult "$LRMULT" --stage "$stage" --tag "$TAG" 2>&1 | grep -vE "Warning|warn|Found GPU|Minimum and|\(8.0\)|^\s*$"
   run=$(ls -td "$CAPE_ROOT"/private/runs/dev_${cfg}_s${SEED}_* | head -1); run=$(basename "$run")

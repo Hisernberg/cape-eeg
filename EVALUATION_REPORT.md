@@ -156,3 +156,32 @@ Claim ladder reached: **Level 1 (reproducible baseline with uncertainty) and Lev
 **Where the candidate is competitive.** High-entropy windows and LRDA (no measurable difference), preprocessing shifts (STFT window: +0.05 vs +0.14), parameter count (9× smaller) and batch-1 latency; batch-32 throughput favours the fused MobileNet kernels.
 
 **Recommendations for the paper.** Present the study as a rigorous negative result with a reusable auditing protocol: a small pretrained CNN on a byte-budgeted two-view cache is a strong, cheap baseline for expert-vote EEG classification, and the three compact mechanisms should not be claimed. The natural next hypotheses within the same protocol are patient-level regularisation (fewer correlated windows per patient per epoch, stronger stochastic depth/dropout) and pretraining the compact trunk on the unlabeled portions of the 17,300 recordings; both would be new named configurations requiring a new lock.
+
+## 11. Post-lock development analyses (added after review; tune partition only, test untouched)
+
+Three-seed (101/202/303) re-run of the mechanism ladder and two confound controls under the frozen complete 3-epoch schedule, last-epoch weights, no checkpoint selection. B3-scratch = MobileNetV3-Small with random initialisation; B3-half = `mobilenetv3_small_050` with ImageNet weights (574,518 parameters). 19 GPU jobs, 0.36 GPU-hours (study total 1.08 h over 36 jobs).
+
+| Config | Params | Tune patient-KL (mean ± SD) | Row KL |
+|---|---:|---:|---:|
+| A1 | 147,524 | 0.976 ± 0.037 | 0.945 |
+| A2 | 155,877 | 0.979 ± 0.015 | 0.942 |
+| B2 | 147,524 | 0.979 ± 0.016 | 0.966 |
+| B3 | 1,524,150 | 0.913 ± 0.028 | 0.865 |
+| B3H | 574,518 | 1.088 ± 0.024 | 1.055 |
+| B3S | 1,524,150 | 1.103 ± 0.077 | 1.061 |
+| P | 164,134 | 0.990 ± 0.063 | 0.979 |
+
+| Paired contrast (same seed) | Δ tune KL (mean ± SD) | per seed |
+|---|---:|---|
+| A1 - B2 | -0.002 ± 0.038 | [np.float64(0.0112), np.float64(0.0276), np.float64(-0.0455)] |
+| A2 - A1 | +0.002 ± 0.052 | [np.float64(-0.0404), np.float64(-0.0134), np.float64(0.0602)] |
+| P - A2 | +0.012 ± 0.048 | [np.float64(-0.0381), np.float64(0.0148), np.float64(0.0585)] |
+| P - B2 | +0.012 ± 0.072 | [np.float64(-0.0673), np.float64(0.0291), np.float64(0.0733)] |
+| B3 - B3S | -0.190 ± 0.068 | [np.float64(-0.1228), np.float64(-0.1888), np.float64(-0.2597)] |
+| B3 - B3H | -0.175 ± 0.052 | [np.float64(-0.1488), np.float64(-0.2347), np.float64(-0.1414)] |
+| B3 - B2 | -0.066 ± 0.017 | [np.float64(-0.0677), np.float64(-0.0816), np.float64(-0.0485)] |
+| P - B3 | +0.078 ± 0.067 | [np.float64(0.0004), np.float64(0.1106), np.float64(0.1217)] |
+| B3S - P | +0.113 ± 0.031 | [np.float64(0.1225), np.float64(0.0782), np.float64(0.138)] |
+| B3H - P | +0.097 ± 0.068 | [np.float64(0.1484), np.float64(0.124), np.float64(0.0197)] |
+
+**Reading.** None of foveation, the learned gate or the disagreement loss changes tune loss by more than the seed spread (all |Δ| ≤ 0.012 with SD 0.04–0.07). ImageNet pretraining is worth 0.19 KL and full width 0.17 KL to the comparator; without either, MobileNetV3-Small is 0.11 (scratch) and 0.10 (half width) *worse* than the compact candidate. The locked-test advantage of B3 is therefore a transfer-learning effect at full width, not an architecture effect. The candidate's own seed spread (0.063) is the largest of the seven configurations.

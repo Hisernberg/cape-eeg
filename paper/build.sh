@@ -3,13 +3,16 @@
 set -euo pipefail
 cd "$(dirname "$0")"
 TEC="${TECTONIC:-$HOME/.conda/envs/tex/bin/tectonic}"
-for v in submission camera; do
+python3 multiseed_ablation.py >/dev/null 2>&1 || { echo "multiseed_ablation.py failed"; exit 1; }
+python3 make_paper_figures.py >/dev/null 2>&1 || { echo "make_paper_figures.py failed"; exit 1; }
+for v in submission camera supplement; do
   "$TEC" --keep-intermediates --outdir build "$v.tex" 2>&1 | grep -vE "Requested font|^note:|^\s*$" || true
 done
 cp build/submission.pdf CAPE-EEG_NSysS2026_submission_anonymous.pdf
 cp build/camera.pdf CAPE-EEG_NSysS2026_author_version.pdf
+cp build/supplement.pdf CAPE-EEG_NSysS2026_supplement_anonymous.pdf
 python3 - <<'PY'
 from pypdf import PdfReader
-for f in ["CAPE-EEG_NSysS2026_submission_anonymous.pdf", "CAPE-EEG_NSysS2026_author_version.pdf"]:
+for f in ["CAPE-EEG_NSysS2026_submission_anonymous.pdf", "CAPE-EEG_NSysS2026_author_version.pdf", "CAPE-EEG_NSysS2026_supplement_anonymous.pdf"]:
     print(f, "pages:", len(PdfReader(f).pages))
 PY

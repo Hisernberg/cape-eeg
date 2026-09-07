@@ -2,13 +2,13 @@
 
 **Byte-budgeted foveated spectrogram learning with expert-disagreement audits on HMS harmful brain activity EEG**
 
-A fully pre-registered, single-GPU study of six-class expert-vote prediction (seizure, LPD, GPD, LRDA, GRDA, other) on the HMS Harmful Brain Activity Classification data, executed end to end on one NVIDIA DGX Spark (GB10) in **0.72 GPU-hours**. The repository contains the complete pipeline, seven executed notebooks, 147 synthetic tests, 20 audited figures and every aggregate result. Patient-level artefacts and the data itself are not redistributed (see `DATA_ACCESS.md`).
+A protocol-locked, single-GPU study of six-class expert-vote prediction (seizure, LPD, GPD, LRDA, GRDA, other) on the HMS Harmful Brain Activity Classification data, executed end to end on one NVIDIA DGX Spark (GB10) in **0.72 GPU-hours**. The repository contains the complete pipeline, seven executed notebooks, 155 synthetic tests, 20 audited figures and every aggregate result. Patient-level artefacts and the data itself are not redistributed (see `DATA_ACCESS.md`).
 
 > Research only. Nothing here is a clinical device, a seizure-onset detector, or a validated decision aid.
 
 ## Headline result (locked test, 391 held-out patients, 21,305 labelled windows)
 
-The pre-registered hypothesis was that the compact foveated-gate candidate **P** (164,134 parameters) beats the strongest small comparator on patient-mean KL divergence to the expert-vote distribution. It does not. The comparator selected on tune data was an ImageNet-pretrained **MobileNetV3-Small** (1,524,150 parameters) on exactly the same cached evidence.
+The protocol-locked hypothesis was that the compact foveated-gate candidate **P** (164,134 parameters) beats the strongest small comparator on patient-mean KL divergence to the expert-vote distribution. It does not. The comparator selected on tune data was an ImageNet-pretrained **MobileNetV3-Small** (1,524,150 parameters) on exactly the same cached evidence.
 
 | Method | Params | Patient-mean KL (3 seeds, mean ± sd) | Row-mean KL | Macro AUROC | Balanced acc. | Soft ECE |
 |---|---:|---:|---:|---:|---:|---:|
@@ -63,11 +63,14 @@ Every model overfits patient-specific structure after two or three epochs, so th
 
 ## Paper (NSysS 2026)
 
-The study is written up as a nine-page ACM-format manuscript for the 13th International Conference on Next Generation Computing, Communication, Systems and Security (NSysS 2026): [`paper/CAPE-EEG_NSysS2026_author_version.pdf`](paper/CAPE-EEG_NSysS2026_author_version.pdf) (author version), [`paper/CAPE-EEG_NSysS2026_submission_anonymous.pdf`](paper/CAPE-EEG_NSysS2026_submission_anonymous.pdf) (double-blind submission) and the full LaTeX source in [`paper/CAPE-EEG_NSysS2026_latex_source.zip`](paper/CAPE-EEG_NSysS2026_latex_source.zip). See `paper/README.md` for the build instructions.
+The study is written up as an ACM-format manuscript for the 13th International Conference on Next Generation Computing, Communication, Systems and Security (NSysS 2026, Cox's Bazar, 17–19 December 2026; double-blind review, 6–8 pages): [`paper/CAPE-EEG_NSysS2026_submission_anonymous.pdf`](paper/CAPE-EEG_NSysS2026_submission_anonymous.pdf) (8-page double-blind submission), [`paper/CAPE-EEG_NSysS2026_supplement_anonymous.pdf`](paper/CAPE-EEG_NSysS2026_supplement_anonymous.pdf) (subgroup and per-seed tables), [`paper/CAPE-EEG_NSysS2026_author_version.pdf`](paper/CAPE-EEG_NSysS2026_author_version.pdf) (author version with appendix) and the LaTeX source in [`paper/CAPE-EEG_NSysS2026_latex_source.zip`](paper/CAPE-EEG_NSysS2026_latex_source.zip). See `paper/README.md`.
 
 ## Full evaluation report
 
 All metrics, subgroup, robustness, evidence, resource tables and the rubric rating are in [`EVALUATION_REPORT.md`](EVALUATION_REPORT.md).
+
+
+**Post-lock development controls (tune only, three seeds, frozen 3-epoch schedule; added after review):** foveation −0.002 ± 0.038, learned gate +0.002 ± 0.052, disagreement loss +0.012 ± 0.048 (none beyond seed spread); MobileNetV3-Small trained from scratch is 0.113 ± 0.031 KL *worse* than the compact candidate and the half-width pretrained MobileNet 0.097 ± 0.068 worse, so the comparator's advantage is ImageNet transfer at full width, not architecture. Full table in `EVALUATION_REPORT.md` section 11 and `results/aggregate/table3b_*.csv`.
 
 ## Repository map
 
@@ -78,7 +81,7 @@ src/cape_eeg/                 contracts, data (inventory, montage, alignment, sp
 scripts/                      audit_source, make_splits, build_cache, train, predict, run_baselines_cpu,
                               evaluate_dev, final_evaluate, make_figures, release_precheck, publish, drivers
 notebooks/                    seven thin notebooks; notebooks/executed/ holds executed copies with aggregate-only outputs
-tests/                        147 CPU synthetic tests (pytest)
+tests/                        155 CPU synthetic tests (pytest)
 docs/                         the eight authoritative planning documents (01–08)
 results/aggregate/            five tables + final_evaluation_summary.json (sanitised, no identifiers)
 figures/                      V01–V20 (PNG 300 dpi + SVG) with provenance sidecars and manifest.json
@@ -91,7 +94,7 @@ refs/REFERENCES.md            source register S01–S13
 export HMS_DATA_ROOT=/path/to/hms   # train.csv, train_eegs/, train_spectrograms/
 export CAPE_ROOT=/path/to/workspace # will hold private/ (never committed)
 pip install -e .                    # or: numpy pandas pyarrow scipy scikit-learn torch timm matplotlib safetensors papermill
-python -m pytest -q                 # 147 synthetic tests, CPU only
+python -m pytest -q                 # 155 synthetic tests, CPU only
 python scripts/audit_source.py && python scripts/make_splits.py
 python scripts/build_cache.py --smoke 64 && python scripts/build_cache.py
 bash scripts/run_dev_pipeline.sh                      # B0–B3, A1, A2, P, P+MSF on train → tune

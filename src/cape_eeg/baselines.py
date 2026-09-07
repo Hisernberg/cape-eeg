@@ -84,10 +84,11 @@ class MobileNetV3Comparator(nn.Module):
     """
     HF_ID = "timm/mobilenetv3_small_100.lamb_in1k"
 
-    def __init__(self, pretrained: bool = True):
+    def __init__(self, pretrained: bool = True, variant: str = "mobilenetv3_small_100.lamb_in1k"):
         super().__init__()
         import timm
-        self.net = timm.create_model("mobilenetv3_small_100.lamb_in1k", pretrained=pretrained, in_chans=N_REGIONS, num_classes=N_CLASSES)
+        self.variant, self.pretrained = variant, pretrained
+        self.net = timm.create_model(variant, pretrained=pretrained, in_chans=N_REGIONS, num_classes=N_CLASSES)
         self.learned_gate = False; self.aux_on = False
 
     def backbone_parameters(self):
