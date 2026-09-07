@@ -55,14 +55,21 @@ OFFSET_ALIASES = {"spectrogram_label_offset_seconds": SPEC_OFFSET_ALIASES}
 # --------------------------------------------------------------------------------------
 # Temporal geometry
 # --------------------------------------------------------------------------------------
-def foveated_time_edges() -> np.ndarray:
-    """Edges (seconds) of the 32 foveated local bins: 8 over [0,20), 16 over [20,30), 8 over [30,50)."""
+def foveated_time_edges(n_bins: int = FOCAL_TIME_BINS) -> np.ndarray:
+    """Edges (seconds) of the foveated local bins: half of them on the labelled centre [20,30).
+
+    n_bins=32 gives 8 over [0,20), 16 over [20,30), 8 over [30,50); 16 and 8 scale the three
+    segments by 1/2 and 1/4 (byte-budget sweep), so coarser encodings are exact unions of finer bins.
+    """
+    if n_bins not in (8, 16, 32):
+        raise ValueError("foveated encodings are defined for 8, 16 or 32 time bins")
+    f = FOCAL_TIME_BINS // n_bins
     edges = [0.0]
     for start, stop, n in FOVEATED_SEGMENTS:
-        seg = np.linspace(start, stop, n + 1)[1:]
+        seg = np.linspace(start, stop, n // f + 1)[1:]
         edges.extend(seg.tolist())
     e = np.asarray(edges, dtype=np.float64)
-    assert e.shape == (FOCAL_TIME_BINS + 1,)
+    assert e.shape == (n_bins + 1,)
     return e
 
 

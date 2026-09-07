@@ -5,6 +5,7 @@ cd "$(dirname "$0")"
 TEC="${TECTONIC:-$HOME/.conda/envs/tex/bin/tectonic}"
 python3 multiseed_ablation.py >/dev/null 2>&1 || { echo "multiseed_ablation.py failed"; exit 1; }
 python3 make_paper_figures.py >/dev/null 2>&1 || { echo "make_paper_figures.py failed"; exit 1; }
+python3 v2_analysis.py >/dev/null 2>&1 || { echo "v2_analysis.py failed"; exit 1; }
 for v in submission camera supplement; do
   "$TEC" --keep-intermediates --outdir build "$v.tex" 2>&1 | grep -vE "Requested font|^note:|^\s*$" || true
 done

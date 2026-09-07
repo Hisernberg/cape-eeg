@@ -29,11 +29,38 @@ def select_rows(index: pd.DataFrame, partitions: list[str], role: str = "develop
     return index.row.to_numpy()[m]
 
 
+def pool_time_bins(values: np.ndarray, mask: np.ndarray, factor: int) -> tuple[np.ndarray, np.ndarray]:
+    """Merge groups of `factor` adjacent local time bins by averaging *linear* power of valid cells.
+
+    Coarser foveated/uniform encodings are exact unions of the cached 32-bin ones, so this reproduces
+    what the converter would have written at that budget. A merged cell is valid when at least half
+    of its members are valid.
+    """
+    B, R, F, T = values.shape
+    v = values.astype(np.float32).reshape(B, R, F, T // factor, factor)
+    m = mask.reshape(B, R, F, T // factor, factor)
+    lin = np.where(m, np.exp(v), 0.0).sum(-1); cnt = m.sum(-1)
+    newmask = cnt >= (factor + 1) // 2
+    newv = np.log(np.maximum(lin / np.maximum(cnt, 1), 1e-8)).astype(np.float32)
+    newv[~newmask] = 0.0
+    return newv, newmask
+
+
+def subsample_patients(index_rows: pd.DataFrame, fraction: float, seed: int) -> np.ndarray:
+    """Deterministic patient-level subsample of a row table (learning-curve experiments)."""
+    pats = np.sort(index_rows.patient_id.unique())
+    keep = np.random.default_rng(20260907 + seed).permutation(pats)[: max(1, int(round(fraction * len(pats))))]
+    return index_rows.row.to_numpy()[index_rows.patient_id.isin(keep).to_numpy()]
+
+
 class CacheDataset:
     """Holds row ids + labels; yields normalized batches. Values are converted to float32 per batch only."""
 
-    def __init__(self, reader: CacheReader, rows: np.ndarray, normalizer: Normalizer, quarantine_both_invalid: bool = True):
+    def __init__(self, reader: CacheReader, rows: np.ndarray, normalizer: Normalizer, quarantine_both_invalid: bool = True, time_bins: int = 32):
         self.reader, self.norm = reader, normalizer
+        if 32 % time_bins:
+            raise ValueError("time_bins must divide 32")
+        self.time_bins = time_bins
         rows = np.asarray(rows)
         q = reader.quality.set_index("row").loc[rows]
         both_bad = (q.local_valid_fraction.to_numpy() == 0) & (q.context_valid_fraction.to_numpy() == 0)
@@ -58,7 +85,10 @@ class CacheDataset:
         rows = self.rows[sel]
         b = self.reader.rows(rows)
         lm = unpack_mask(b["local_mask"], (len(rows), *LOCAL_SHAPE)); cm = unpack_mask(b["context_mask"], (len(rows), *CONTEXT_SHAPE))
-        local = self.norm("local", b["local"], lm); context = self.norm("context", b["context"], cm)
+        lv = b["local"]
+        if self.time_bins < 32:
+            lv, lm = pool_time_bins(lv, lm, 32 // self.time_bins)
+        local = self.norm("local", lv, lm); context = self.norm("context", b["context"], cm)
         return {"local": local, "local_mask": lm, "context": context, "context_mask": cm,
                 "valid_l": lm.reshape(len(rows), -1).mean(1).astype(np.float32),
                 "valid_c": cm.reshape(len(rows), -1).mean(1).astype(np.float32),

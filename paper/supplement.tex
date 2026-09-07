@@ -4,6 +4,8 @@
 \settopmatter{printacmref=false}\setcopyright{none}\renewcommand\footnotetextcopyrightpermission[1]{}
 \acmConference[NSysS '26]{13th International Conference on Next Generation Computing, Communication, Systems and Security}{December 17--19, 2026}{Cox's Bazar, Bangladesh}
 \acmYear{2026}\copyrightyear{2026}\acmDOI{}\acmISBN{}
+\input{numbers}
+\input{numbers_v2}
 \begin{document}
 \title{Supplementary Material: When Compact Is Not Enough}
 \author{Anonymous}\affiliation{\institution{Anonymous}\country{}}
@@ -11,16 +13,81 @@
 \maketitle
 \noindent This supplement contains the temporal-alignment audit figure, the sixteen prespecified subgroup estimates and the per-seed locked-test results supporting the main paper. All values are measured under protocol hash \texttt{380269a4a6db7334}; subgroup contrasts are exploratory and unadjusted for multiplicity.
 \section{Temporal alignment audit}
-Figure~1 shows the synthetic-impulse audit that every cache must pass before conversion.
+Figure~\ref{fig:supalign} shows the synthetic-impulse audit that every cache must pass before conversion.
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=0.55\textwidth]{figures/fig_alignment.pdf}
 \caption{A synthetic 3\,Hz burst confined to seconds 22--28 passed through the real encoder. Foveated bins are drawn with their true widths; the labelled centre $[20,30)$\,s is marked in cyan; the uniform control spends the same bytes with equal bins.}
+\label{fig:supalign}
 \end{figure}
+\section{Implementation and reproducibility details}
+
+\textbf{Cache conversion} groups windows by recording, reads each Parquet file once, writes float16 values and packed masks into pre-allocated memory-mapped shards of 2,048 rows through \texttt{.partial} files renamed atomically only after both views exist for every row, and checksums each shard into a manifest; pinning BLAS to one thread per worker was necessary because multi-threaded matrix products made the context pass two orders of magnitude slower. \textbf{Training} runs under a supervisor that samples CUDA allocation, process-tree memory and system availability every fifty steps and aborts at declared stops; a \texttt{flock}-based lock forbids concurrent GPU jobs, and every job appends its wall time to the ledger whether it passed or failed. \textbf{Roles} are enforced in code: a development-role loader raises on any request for the test partition, and the evaluator role logs each test access against the protocol hash. \textbf{Release} is an allowlisted export with identifier and secret scans of the working tree and of every reachable Git object; notebooks are published with aggregate-only outputs, per-row predictions and weights stay private, and public tables suppress cells with fewer than ten patients. The repository ships 170 synthetic CPU tests, eight executed notebooks, the protocol document and every figure with a provenance sidecar recording the hashes it was drawn from.
+
+
+\section{Design guidance for practitioners}
+Cap and count the evidence so that ``compact'' is measurable; freeze the schedule rather than the checkpoint, because checkpoint selection on a tuning set overstates what a complete refit delivers; choose the comparator on data; calibrate on a partition that never trains weights and report the temperature; and audit evidence by deletion and preprocessing by perturbation, because the two audits disagreed about which model is safer.
+
+
+\section{Data governance}
+The release contains no EEG samples, spectrogram values, identifiers, split membership tables, per-window predictions or trained weights; each is reconstructible by an authorised holder of the source data from the published hashes and code. These are data-minimisation measures, not an anonymisation guarantee.
+
+
+\section{Development phase (seed 101)}
+Table~\ref{tab:devsup} lists the eight named GPU configurations of the development phase, the two CPU baselines, and the two permitted common-shorter-schedule pilots that fixed the final 3-epoch schedule.
+\begin{table}[htbp]
+\caption{Development phase (tune partition, seed 101). GPU configurations 1--8 were the named cap; P$_3$ and B3$_3$ are the permitted common-shorter-schedule pilot, which was frozen for the final refits.}
+\label{tab:devsup}
+\footnotesize
+\setlength{\tabcolsep}{3.5pt}
+\begin{tabular}{llrrl}
+\toprule
+ID & Configuration & Params & Tune KL & Schedule (best ep.) \\
+\midrule
+B0 & vote prior (CPU) & 0 & 1.410 & -- \\
+B1 & band-power regression (CPU) & 450 & 1.241 & LBFGS \\
+B2 & uniform bins, fixed fusion & 147,524 & 0.986 & 12 ep (2) \\
+A1 & B2 + foveation & 147,524 & 1.001 & 12 ep (2) \\
+A2 & A1 + learned gate & 155,877 & 0.990 & 12 ep (1) \\
+P & A2 + disagreement aux & 164,134 & 0.983 & 12 ep (2) \\
+P+MSF & P + multi-scale block & 208,070 & 0.988 & 12 ep (1) \\
+B3 & MobileNetV3-Small & 1,524,150 & 0.896 & 12 ep (3) \\
+P$_3$ & pilot 7 & 164,134 & 0.9270 & 3 ep, complete \\
+B3$_3$ & pilot 8 & 1,524,150 & 0.9266 & 3 ep, complete \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section{Calibration and review prioritisation}
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.95\textwidth]{figures/fig_calibration.pdf}
+\caption{Left: reliability of P and B3 before and after temperature scaling (seed 101, locked test). Right: KL risk--coverage with the frozen entropy score; squares mark the operating points whose thresholds were fixed on Calibration-P.}
+\end{figure}
+\section{Paired within-seed contrasts of the post-lock ablations}
+\begin{table}[htbp]
+\caption{Paired $\Delta$ tune patient-mean KL (mean $\pm$ SD over seeds 101/202/303; negative = first term better) under the frozen 3-epoch schedule.}
+\small
+\begin{tabular}{lr}
+\toprule
+Contrast & $\Delta$ \\
+\midrule
+Foveation (A1 $-$ B2) & \dfoveation{} $\pm$ \dsdfoveation \\
+Learned gate (A2 $-$ A1) & \dgate{} $\pm$ \dsdgate \\
+Disagreement loss (P $-$ A2) & \daux{} $\pm$ \dsdaux \\
+All three (P $-$ B2) & \dall{} $\pm$ \dsdall \\
+ImageNet pretraining (B3 $-$ B3-scratch) & \dpretrain{} $\pm$ \dsdpretrain \\
+Full vs half width (B3 $-$ B3-half) & \dwidth{} $\pm$ \dsdwidth \\
+B3-scratch $-$ P & \dscratchvsp{} $\pm$ \dsdscratchvsp \\
+B3-half $-$ P & \dhalfvsp{} $\pm$ \dsdhalfvsp \\
+\bottomrule
+\end{tabular}
+\end{table}
 \section{Prespecified subgroup estimates}
-Table~1 lists the sixteen strata frozen in the protocol document.
+Table~\ref{tab:supstrata} lists the sixteen strata frozen in the protocol document.
 \begin{table}[htbp]
 \caption{Paired calibrated difference in patient-mean KL (P $-$ B3, three seeds) within the sixteen strata frozen before the test; exploratory, unadjusted. Positive favours the comparator.}
+\label{tab:supstrata}
 \small\setlength{\tabcolsep}{6pt}
 \begin{tabular}{lrrrrl}
 \toprule
@@ -46,9 +113,10 @@ Tied majority & 823 & 97 & 0.760 & 0.718 & $+0.042$ $[-0.021,+0.106]$ \\
 \end{tabular}
 \end{table}
 \section{Per-seed locked-test results}
-Table~2 gives the per-seed values behind the three-seed means of the main paper.
+Table~\ref{tab:supseeds} gives the per-seed values behind the three-seed means of the main paper.
 \begin{table}[htbp]
 \caption{Per-seed locked-test results (temperature-calibrated) and per-class AUROC on unique-majority windows. $T$ = temperature fitted on Calibration-T; AURC = area under the KL risk--coverage curve (coverage 0.5--1.0) with the frozen entropy score.}
+\label{tab:supseeds}
 \small\setlength{\tabcolsep}{5pt}
 \begin{tabular}{llrrrrrrrrrrr}
 \toprule

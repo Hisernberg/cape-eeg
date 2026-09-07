@@ -20,7 +20,7 @@ W1 = 3.45  # single column width (in)
 # ---------------------------------------------------------------- 1. primary
 d = pd.read_csv(ROOT / "private/figures_private/v09_per_component_delta_calibrated.csv")
 pr = S["primary"]["primary_calibrated"]
-fig, ax = plt.subplots(figsize=(W1, 2.6))
+fig, ax = plt.subplots(figsize=(W1, 2.3))
 ax.hist(d.delta_kl, bins=np.arange(-1.7, 1.75, 0.1), color=CP, alpha=0.85, edgecolor="white")
 ax.axvline(0, color="k", ls="--", lw=1.2); ax.axvspan(pr["ci_low"], pr["ci_high"], color=CB, alpha=0.35, label="95% CI of the mean")
 ax.axvline(pr["point_estimate"], color=CB, lw=2, label=f"mean $\\Delta$ = {pr['point_estimate']:+.3f}")
@@ -59,7 +59,7 @@ fig, ax = plt.subplots(figsize=(W1, 2.6))
 styles = {"B2": (CR, "-"), "A1": ("#9467BD", "-"), "A2": ("#8C564B", "-"), "P": (CP, "-"), "P_MSF": ("#17BECF", "-"), "B3": (CB, "-"), "B3S": ("#D62728", "-"), "B3H": ("#BCBD22", "-")}
 for rd in sorted(p for p in glob.glob(str(ROOT / "private/runs/dev_*")) if Path(p, "config.resolved.json").exists()):
     cfg = json.load(open(rd + "/config.resolved.json")); ev = [json.loads(l) for l in open(rd + "/events.jsonl")]
-    if cfg["seed"] != 101 or cfg["config_id"] in ("B3S", "B3H"): continue
+    if cfg["seed"] != 101 or cfg["config_id"] not in styles or cfg["config_id"] in ("B3S", "B3H") or cfg.get("patient_fraction", 1.0) < 1.0: continue
     c, ls = styles[cfg["config_id"]]; lab = cfg["config_id"].replace("_", "+") + (" (3 ep)" if cfg["epochs"] == 3 else "")
     ax.plot([e["epoch"] for e in ev], [e["tune_patient_kl"] for e in ev], ls if cfg["epochs"] == 12 else "--", color=c, lw=2 if cfg["config_id"] in ("P", "B3") else 1.3, marker="o" if cfg["epochs"] == 3 else None, ms=5, label=lab)
 ax.set_xlabel("Epoch"); ax.set_ylabel("Tune patient-mean KL"); ax.set_ylim(0.85, 1.25); ax.set_xticks(range(1, 13))
@@ -99,7 +99,7 @@ fig.tight_layout(); fig.savefig(OUT / "fig_evidence.pdf", bbox_inches="tight"); 
 
 # ---------------------------------------------------------------- 6. robustness grouped bars
 conds = [("region_missing_LL", "LL region\nremoved"), ("time_mask_10pct", "10% time\nmask"), ("gain_shift_mild", "gain\n+0.5"), ("gain_shift_strong", "gain\n+1.5"), ("stft_window_512", "STFT\n512")]
-fig, ax = plt.subplots(figsize=(W1, 2.7)); x = np.arange(len(conds)); w = 0.38
+fig, ax = plt.subplots(figsize=(W1, 2.3)); x = np.arange(len(conds)); w = 0.38
 for i, (cid, col) in enumerate([("P", CP), ("B3", CB)]):
     r = S["robustness_evidence"][cid]["robustness"]
     v = [r[c]["delta_kl"] for c, _ in conds]; lo = [r[c]["delta_kl"] - r[c]["ci_low"] for c, _ in conds]; hi = [r[c]["ci_high"] - r[c]["delta_kl"] for c, _ in conds]

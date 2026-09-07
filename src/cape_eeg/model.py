@@ -64,7 +64,7 @@ def js_divergence(p: torch.Tensor, q: torch.Tensor) -> torch.Tensor:
 
 class CAPEModel(nn.Module):
     def __init__(self, channels=(24, 48, 64, 96, 128), embedding: int = 128, learned_gate: bool = True, aux: bool = True,
-                 encoding: str = "foveated", multiscale: bool = False, fixed_gate_value: float = 0.5):
+                 encoding: str = "foveated", multiscale: bool = False, fixed_gate_value: float = 0.5, time_bins: int = 32, dm: bool = False):
         super().__init__()
         c0, c1, c2, c3, c4 = channels
         self.stem_l = nn.Sequential(nn.Conv2d(N_REGIONS, c0, 3, padding=1, bias=False), _gn(c0), nn.SiLU())
@@ -77,10 +77,11 @@ class CAPEModel(nn.Module):
         self.learned_gate, self.aux_on, self.fixed_gate_value = learned_gate, aux, fixed_gate_value
         self.gate = nn.Sequential(nn.Linear(2 * embedding + 3, 32), nn.SiLU(), nn.Linear(32, 1)) if learned_gate else None
         self.aux = nn.Sequential(nn.Linear(2 * embedding, 32), nn.SiLU(), nn.Linear(32, 1)) if aux else None
-        edges = foveated_time_edges() if encoding == "foveated" else uniform_time_edges()
+        self.dm = dm and aux   # Dirichlet-multinomial concentration head instead of the scalar disagreement regressor
+        edges = foveated_time_edges(time_bins) if encoding == "foveated" else uniform_time_edges(time_bins)
         w = torch.tensor(center_weights_from_edges(edges), dtype=torch.float32)
         self.register_buffer("center_weights_full", w)
-        self.encoding = encoding
+        self.encoding, self.time_bins = encoding, time_bins
 
     def _center_weights(self, t_out: int) -> torch.Tensor:
         """Pool the 32-column center map onto the trunk's downsampled time axis (adaptive average)."""
@@ -118,8 +119,15 @@ class CAPEModel(nn.Module):
             elif force_view == "context":
                 g = torch.ones_like(g)
             p = (1 - g)[:, None] * pL + g[:, None] * pC
-            d_hat = torch.sigmoid(self.aux(torch.cat([uL, uC], 1))).squeeze(1) if self.aux_on else None
-        return {"p": p, "pL": pL, "pC": pC, "g": g, "js": js, "d_hat": d_hat, "uL": uL, "uC": uC}
+            dm_c = None
+            if self.aux_on and self.dm:
+                # concentration c(x) of a Dirichlet-multinomial vote model v ~ DirMult(n, c * p);
+                # expected pairwise disagreement under that model: 1 - sum_k p_k (c p_k + 1)/(c + 1)
+                dm_c = F.softplus(self.aux(torch.cat([uL, uC], 1)).squeeze(1)) + 1e-3
+                d_hat = 1.0 - (p * (dm_c[:, None] * p + 1.0) / (dm_c[:, None] + 1.0)).sum(-1)
+            else:
+                d_hat = torch.sigmoid(self.aux(torch.cat([uL, uC], 1))).squeeze(1) if self.aux_on else None
+        return {"p": p, "pL": pL, "pC": pC, "g": g, "js": js, "d_hat": d_hat, "dm_c": dm_c, "uL": uL, "uC": uC}
 
 
 def count_parameters(m: nn.Module) -> dict:
@@ -134,6 +142,12 @@ CONFIGS = {
     "A2": dict(learned_gate=True, aux=False, encoding="foveated", multiscale=False),
     "P": dict(learned_gate=True, aux=True, encoding="foveated", multiscale=False),
     "P_MSF": dict(learned_gate=True, aux=True, encoding="foveated", multiscale=True),
+    # post-lock development configurations (never eligible for the locked comparison)
+    "P_DM": dict(learned_gate=True, aux=True, encoding="foveated", multiscale=False, dm=True),
+    "B2_t16": dict(learned_gate=False, aux=False, encoding="uniform", multiscale=False, time_bins=16),
+    "B2_t8": dict(learned_gate=False, aux=False, encoding="uniform", multiscale=False, time_bins=8),
+    "A1_t16": dict(learned_gate=False, aux=False, encoding="foveated", multiscale=False, time_bins=16),
+    "A1_t8": dict(learned_gate=False, aux=False, encoding="foveated", multiscale=False, time_bins=8),
 }
 DESCRIPTIONS = {
     "B0": "training-set empirical soft class prior",
@@ -146,6 +160,11 @@ DESCRIPTIONS = {
     "A2": "A1 + learned gate (auxiliary loss off)",
     "P": "A2 + disagreement auxiliary loss (full prespecified candidate)",
     "P_MSF": "P with an economical multi-scale temporal fusion block replacing the last residual block (exploratory)",
+    "P_DM": "CAPE-EEG v2 head: Dirichlet-multinomial vote model with a learned concentration c(x) replacing the scalar disagreement regressor (post-lock, development only)",
+    "B2_t16": "B2 with 16 uniform local time bins (byte-budget sweep; half the local bytes)",
+    "B2_t8": "B2 with 8 uniform local time bins (byte-budget sweep; quarter of the local bytes)",
+    "A1_t16": "A1 with 16 foveated local time bins (4+8+4; byte-budget sweep)",
+    "A1_t8": "A1 with 8 foveated local time bins (2+4+2; byte-budget sweep)",
 }
 
 

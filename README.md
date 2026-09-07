@@ -72,6 +72,8 @@ All metrics, subgroup, robustness, evidence, resource tables and the rubric rati
 
 **Post-lock development controls (tune only, three seeds, frozen 3-epoch schedule; added after review):** foveation −0.002 ± 0.038, learned gate +0.002 ± 0.052, disagreement loss +0.012 ± 0.048 (none beyond seed spread); MobileNetV3-Small trained from scratch is 0.113 ± 0.031 KL *worse* than the compact candidate and the half-width pretrained MobileNet 0.097 ± 0.068 worse, so the comparator's advantage is ImageNet transfer at full width, not architecture. Full table in `EVALUATION_REPORT.md` section 11 and `results/aggregate/table3b_*.csv`.
 
+**Revision analyses (tune only, three seeds, frozen schedule; `EVALUATION_REPORT.md` section 12):** the foveation null holds at 8, 16 and 32 local time bins (byte-budget sweep); both models are still improving at the full 1,170 training patients (patient-count learning curve); a Dirichlet–multinomial vote head (CAPE-EEG v2) is an equal classifier and an equal disagreement predictor to the scalar head; measured energy is 2.9 mJ (P) and 2.3 mJ (B3) per window above idle at batch 32, and CPU-only single-thread latency is 8.9 versus 10.8 ms. External validation on a second corpus is planned but blocked on data access (`docs/09_External_Validation_Plan.md`).
+
 ## Repository map
 
 ```
@@ -80,8 +82,8 @@ src/cape_eeg/                 contracts, data (inventory, montage, alignment, sp
                               normalization, dataset), model, baselines, training, evaluation, visualization, release
 scripts/                      audit_source, make_splits, build_cache, train, predict, run_baselines_cpu,
                               evaluate_dev, final_evaluate, make_figures, release_precheck, publish, drivers
-notebooks/                    seven thin notebooks; notebooks/executed/ holds executed copies with aggregate-only outputs
-tests/                        155 CPU synthetic tests (pytest)
+notebooks/                    eight thin notebooks (07 = post-lock revision analyses); notebooks/executed/ holds executed copies with aggregate-only outputs
+tests/                        170 CPU synthetic tests (pytest)
 docs/                         the eight authoritative planning documents (01–08)
 results/aggregate/            five tables + final_evaluation_summary.json (sanitised, no identifiers)
 figures/                      V01–V20 (PNG 300 dpi + SVG) with provenance sidecars and manifest.json
@@ -94,7 +96,7 @@ refs/REFERENCES.md            source register S01–S13
 export HMS_DATA_ROOT=/path/to/hms   # train.csv, train_eegs/, train_spectrograms/
 export CAPE_ROOT=/path/to/workspace # will hold private/ (never committed)
 pip install -e .                    # or: numpy pandas pyarrow scipy scikit-learn torch timm matplotlib safetensors papermill
-python -m pytest -q                 # 155 synthetic tests, CPU only
+python -m pytest -q                 # 170 synthetic tests, CPU only
 python scripts/audit_source.py && python scripts/make_splits.py
 python scripts/build_cache.py --smoke 64 && python scripts/build_cache.py
 bash scripts/run_dev_pipeline.sh                      # B0–B3, A1, A2, P, P+MSF on train → tune

@@ -12,7 +12,7 @@ rows = []
 for rd in sorted(glob.glob(str(ROOT / "private/runs/dev_*"))):
     if not Path(rd, "config.resolved.json").exists(): continue
     cfg = json.load(open(rd + "/config.resolved.json")); st = json.load(open(rd + "/status.json"))
-    if cfg["epochs"] != 3 or st["status"] != "PASS": continue
+    if cfg["epochs"] != 3 or st["status"] != "PASS" or cfg["config_id"] not in ("B2", "A1", "A2", "P", "B3", "B3S", "B3H") or cfg.get("patient_fraction", 1.0) < 1.0: continue
     ev = [json.loads(l) for l in open(rd + "/events.jsonl")]
     rows.append({"config": cfg["config_id"], "seed": cfg["seed"], "params": cfg["parameters"]["total"], "tune_kl_last": ev[-1]["tune_patient_kl"], "tune_rowkl_last": ev[-1]["tune_row_kl"],
                  "tune_kl_best": min(e["tune_patient_kl"] for e in ev), "gate_mean": ev[-1].get("tune_gate_mean"), "wall_min": st["wall_seconds"] / 60})

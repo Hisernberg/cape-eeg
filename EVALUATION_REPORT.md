@@ -185,3 +185,65 @@ Three-seed (101/202/303) re-run of the mechanism ladder and two confound control
 | B3H - P | +0.097 ± 0.068 | [np.float64(0.1484), np.float64(0.124), np.float64(0.0197)] |
 
 **Reading.** None of foveation, the learned gate or the disagreement loss changes tune loss by more than the seed spread (all |Δ| ≤ 0.012 with SD 0.04–0.07). ImageNet pretraining is worth 0.19 KL and full width 0.17 KL to the comparator; without either, MobileNetV3-Small is 0.11 (scratch) and 0.10 (half width) *worse* than the compact candidate. The locked-test advantage of B3 is therefore a transfer-learning effect at full width, not an architecture effect. The candidate's own seed spread (0.063) is the largest of the seven configurations.
+
+## 12. Revision analyses: byte-budget sweep, learning curve, Dirichlet–multinomial head, energy (tune only; test untouched)
+
+Nineteen plus thirty-three further development runs (GPU ledger now 1.99 h over 72 jobs, 0 failures) under the frozen complete 3-epoch schedule, last-epoch weights, three seeds.
+
+### Byte-budget sweep (fixed fusion, no auxiliary head; coarser encodings are exact unions of the cached 32-bin cells)
+
+| Local time bins | Local bytes / window | Encoding | Tune patient-KL |
+|---:|---:|---|---:|
+| 8 | 4,352 | foveated | 0.999 ± 0.034 |
+| 8 | 4,352 | uniform | 1.014 ± 0.033 |
+| 16 | 8,704 | foveated | 1.007 ± 0.021 |
+| 16 | 8,704 | uniform | 1.004 ± 0.017 |
+| 32 | 17,408 | foveated | 0.976 ± 0.037 |
+| 32 | 17,408 | uniform | 0.979 ± 0.016 |
+
+| Bins | Foveated − uniform (mean ± SD) | per seed |
+|---:|---:|---|
+| 8 | -0.015 ± 0.054 | [np.float64(0.0272), np.float64(0.0038), np.float64(-0.0752)] |
+| 16 | +0.003 ± 0.004 | [np.float64(0.004), np.float64(0.0063), np.float64(-0.002)] |
+| 32 | -0.002 ± 0.038 | [np.float64(0.0112), np.float64(0.0276), np.float64(-0.0455)] |
+
+The foveation null is not a resolution artefact: foveated and uniform encodings are indistinguishable at every budget, and a four-fold compression of the local view costs only ~0.035 KL.
+
+### Patient-count learning curve (P and B3; deterministic patient subsets; full tune evaluation)
+
+| Model | Fraction | Train patients | Train rows | Tune patient-KL |
+|---|---:|---:|---:|---:|
+| B3 | 0.25 | 292 | 14,120 | 1.196 ± 0.080 |
+| B3 | 0.50 | 585 | 33,503 | 0.977 ± 0.010 |
+| B3 | 0.75 | 878 | 47,428 | 0.923 ± 0.023 |
+| B3 | 1.00 | 1170 | 64,292 | 0.913 ± 0.028 |
+| P | 0.25 | 292 | 14,120 | 1.187 ± 0.062 |
+| P | 0.50 | 585 | 33,503 | 1.060 ± 0.044 |
+| P | 0.75 | 878 | 47,428 | 1.052 ± 0.057 |
+| P | 1.00 | 1170 | 64,292 | 0.990 ± 0.063 |
+
+Both models are still improving at the full 1,170 patients; the comparator's margin is absent at a quarter of the patients and opens as patients are added. The task is patient-limited.
+
+### Dirichlet–multinomial vote head (CAPE-EEG v2) versus the scalar disagreement head
+
+| Config | Tune patient-KL | Spearman(d̂, observed d) | AURC entropy | AURC d̂ |
+|---|---:|---:|---:|---:|
+| A2 | 0.979 ± 0.015 |  | 0.432 |  |
+| P | 0.990 ± 0.063 | 0.309 ± 0.022 | 0.446 | 0.477 |
+| P_DM | 0.997 ± 0.044 | 0.310 ± 0.033 | 0.450 | 0.472 |
+
+The probabilistic head is an equal classifier and an equal disagreement predictor; entropy remains the better referral score. The limit is the information in the auxiliary signal, not its parameterisation.
+
+### Inference energy and CPU latency (frozen seed-101 models; boundary in `inference_measurements.json`)
+
+| | P | B3 |
+|---|---:|---:|
+| GPU batch 32 throughput | 9883 win/s | 15262 win/s |
+| Mean package power under load (idle 12.3 W) | 41.4 W | 46.9 W |
+| Incremental energy per window | 2.94 mJ | 2.27 mJ |
+| Energy per window incl. idle | 4.19 mJ | 3.08 mJ |
+| CPU-only latency, 1 thread, batch 1 | 8.8 ms | 10.8 ms |
+| CPU-only latency, 4 threads, batch 1 | 13.9 ms | 13.8 ms |
+
+### External validation
+Not performed: the only public corpus with periodic-discharge labels (TUEV) requires registered access. The fixed label mapping, alignment rule and lock procedure are in `docs/09_External_Validation_Plan.md`.

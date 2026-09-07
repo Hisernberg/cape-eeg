@@ -1,0 +1,82 @@
+{
+  "timestamp": "2026-09-07T16:58:23+00:00",
+  "device": "NVIDIA GB10",
+  "boundary": "GPU package power as reported by nvidia-smi power.draw on the GB10 unified-memory system, sampled at 10 Hz during a 20 s sustained inference loop; idle baseline (20 s, no work) subtracted; energy per window = (mean load power - idle power) / throughput. CPU figures use PyTorch eager float32 on the host ARM cores with the stated thread count; they are a no-accelerator reference, not an embedded-device measurement.",
+  "idle_power_w": 12.3135,
+  "P": {
+    "parameters": 164134,
+    "input_bytes_per_window_float16": 52224,
+    "gpu_batch_1": {
+      "median_ms": 1.3669894979102537,
+      "p95_ms": 1.5281938351108693,
+      "n_timed": 100,
+      "windows_per_s": 749.3384677414673,
+      "mean_power_w": 19.855527950310556,
+      "idle_power_w": 12.3135,
+      "incremental_power_w": 7.5420279503105565,
+      "energy_mj_per_window_incremental": 10.064914954976881,
+      "energy_mj_per_window_total": 26.49740912161606,
+      "n_power_samples": 161
+    },
+    "gpu_batch_32": {
+      "median_ms": 2.709875494474545,
+      "p95_ms": 3.208281335537322,
+      "n_timed": 100,
+      "windows_per_s": 9883.298498961723,
+      "mean_power_w": 41.37814102564102,
+      "idle_power_w": 12.3135,
+      "incremental_power_w": 29.064641025641023,
+      "energy_mj_per_window_incremental": 2.940783487283559,
+      "energy_mj_per_window_total": 4.186673207329308,
+      "n_power_samples": 156
+    },
+    "cpu_threads_1_batch_1": {
+      "median_ms": 8.846600496326573,
+      "p95_ms": 14.731177999055944,
+      "n_timed": 50
+    },
+    "cpu_threads_4_batch_1": {
+      "median_ms": 13.878055004170164,
+      "p95_ms": 15.800505608785896,
+      "n_timed": 50
+    }
+  },
+  "B3": {
+    "parameters": 1524150,
+    "input_bytes_per_window_float16": 52224,
+    "gpu_batch_1": {
+      "median_ms": 1.5245414979290217,
+      "p95_ms": 1.6284754150547085,
+      "n_timed": 100,
+      "windows_per_s": 658.241282152361,
+      "mean_power_w": 19.919875776397514,
+      "idle_power_w": 12.3135,
+      "incremental_power_w": 7.606375776397515,
+      "energy_mj_per_window_incremental": 11.55560427860994,
+      "energy_mj_per_window_total": 30.262270563253317,
+      "n_power_samples": 161
+    },
+    "gpu_batch_32": {
+      "median_ms": 1.8559245072538033,
+      "p95_ms": 2.214120801363606,
+      "n_timed": 100,
+      "windows_per_s": 15261.719133798035,
+      "mean_power_w": 46.949622641509436,
+      "idle_power_w": 12.3135,
+      "incremental_power_w": 34.63612264150944,
+      "energy_mj_per_window_incremental": 2.269477136740485,
+      "energy_mj_per_window_total": 3.076299742506501,
+      "n_power_samples": 159
+    },
+    "cpu_threads_1_batch_1": {
+      "median_ms": 10.810692503582686,
+      "p95_ms": 14.428328655776568,
+      "n_timed": 50
+    },
+    "cpu_threads_4_batch_1": {
+      "median_ms": 13.770839010248892,
+      "p95_ms": 16.10879419313278,
+      "n_timed": 50
+    }
+  }
+}

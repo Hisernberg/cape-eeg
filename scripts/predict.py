@@ -15,7 +15,7 @@ from cape_eeg.contracts import stable_hash
 from cape_eeg.data.cache import CacheReader
 from cape_eeg.data.dataset import CacheDataset, select_rows
 from cape_eeg.data.normalization import load_normalizer, Normalizer
-from cape_eeg.model import build_model
+from cape_eeg.model import build_model, CONFIGS
 from cape_eeg.training.engine import predict, load_weights
 
 ap = argparse.ArgumentParser()
@@ -42,7 +42,7 @@ N = Normalizer(norm); device = torch.device("cuda" if torch.cuda.is_available() 
 model = build_model(cfg["config_id"]); load_weights(model, run_dir / "checkpoints" / f"{a.weights}.safetensors"); model.to(device).eval()
 (run_dir / "predictions").mkdir(exist_ok=True)
 for part in a.partitions:
-    rows = select_rows(reader.index, [part], a.role); ds = CacheDataset(reader, rows, N)
+    rows = select_rows(reader.index, [part], a.role); ds = CacheDataset(reader, rows, N, time_bins=cfg.get("time_bins", CONFIGS.get(cfg["config_id"], {}).get("time_bins", 32)))
     for view in a.views:
         t0 = time.time(); r = predict(model, ds, device, force_view=None if view == "full" else view)
         df = pd.DataFrame({"label_id": ds.label_id, "patient_id": ds.patient, "component": ds.component, "n_votes": ds.n_votes,
