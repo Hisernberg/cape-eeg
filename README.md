@@ -61,6 +61,10 @@ The reading for a conference paper: with a fair, byte-matched and leak-free prot
 
 Every model overfits patient-specific structure after two or three epochs, so the two allowed *common shorter schedule* pilots (configurations 7 and 8 of the eight permitted) were run and the 3-epoch complete schedule was frozen for the final refits on train+tune. On tune the two methods tie under that schedule; on the locked test they do not.
 
+## Paper (NSysS 2026)
+
+The study is written up as a nine-page ACM-format manuscript for the 13th International Conference on Next Generation Computing, Communication, Systems and Security (NSysS 2026): [`paper/CAPE-EEG_NSysS2026_author_version.pdf`](paper/CAPE-EEG_NSysS2026_author_version.pdf) (author version), [`paper/CAPE-EEG_NSysS2026_submission_anonymous.pdf`](paper/CAPE-EEG_NSysS2026_submission_anonymous.pdf) (double-blind submission) and the full LaTeX source in [`paper/CAPE-EEG_NSysS2026_latex_source.zip`](paper/CAPE-EEG_NSysS2026_latex_source.zip). See `paper/README.md` for the build instructions.
+
 ## Full evaluation report
 
 All metrics, subgroup, robustness, evidence, resource tables and the rubric rating are in [`EVALUATION_REPORT.md`](EVALUATION_REPORT.md).

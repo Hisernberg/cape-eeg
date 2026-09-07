@@ -9,9 +9,9 @@ from pathlib import Path
 
 from ..contracts import stable_hash, file_sha256
 
-ALLOWED_TOP = ["README.md", "EVALUATION_REPORT.md", "AGENTS.md", "CODEX_EXECUTION.md", "CITATION.cff", "LICENSE", "DATA_ACCESS.md", "MODEL_CARD.md", "REPRODUCIBILITY.md",
+ALLOWED_TOP = ["README.md", "EVALUATION_REPORT.md", "paper", "AGENTS.md", "CODEX_EXECUTION.md", "CITATION.cff", "LICENSE", "DATA_ACCESS.md", "MODEL_CARD.md", "REPRODUCIBILITY.md",
                "pyproject.toml", ".gitignore", "configs", "src", "scripts", "tests", "notebooks", "docs", "refs", "results/aggregate", "figures", ".github"]
-ALLOWED_EXT = {".py", ".sh", ".md", ".yaml", ".yml", ".toml", ".cff", ".txt", ".json", ".csv", ".ipynb", ".png", ".svg", ".gitignore", ".cfg", ".ini", ""}
+ALLOWED_EXT = {".py", ".sh", ".md", ".tex", ".bib", ".pdf", ".yaml", ".yml", ".toml", ".cff", ".txt", ".json", ".csv", ".ipynb", ".png", ".svg", ".gitignore", ".cfg", ".ini", ""}
 FORBIDDEN_NAMES = {"train.csv", "test.csv", "sample_submission.csv"}
 FORBIDDEN_EXT = {".parquet", ".npy", ".pt", ".safetensors", ".pkl", ".pickle", ".zip", ".h5", ".hdf5", ".log"}
 MAX_FILE_BYTES = 10 * 1024 * 1024; MAX_EXPORT_BYTES = 100 * 1024 * 1024
@@ -19,7 +19,7 @@ SECRET_PATTERNS = [r"ghp_[A-Za-z0-9]{30,}", r"github_pat_[A-Za-z0-9_]{30,}", r"K
                    r"AKIA[0-9A-Z]{16}", r"-----BEGIN (RSA|OPENSSH|EC|DSA) PRIVATE KEY-----", r"xox[baprs]-[A-Za-z0-9-]{10,}"]
 # private identifiers that must not appear in public text/notebook outputs: 8-10 digit ids following these column words
 IDENTIFIER_PATTERNS = [r"\b(patient_id|eeg_id|spectrogram_id|label_id)\b\s*[:=]\s*\d{5,}"]
-TEXT_EXT = {".py", ".sh", ".md", ".yaml", ".yml", ".toml", ".cff", ".txt", ".json", ".csv", ".ipynb", ".svg", ".cfg", ".ini", ""}
+TEXT_EXT = {".py", ".sh", ".md", ".tex", ".bib", ".yaml", ".yml", ".toml", ".cff", ".txt", ".json", ".csv", ".ipynb", ".svg", ".cfg", ".ini", ""}
 
 
 def strip_notebook(src: Path, dst: Path, keep_outputs: bool = False):
@@ -41,7 +41,7 @@ def iter_allowed(repo: Path):
         if p.is_file():
             yield p; continue
         for f in sorted(p.rglob("*")):
-            if f.is_file() and "__pycache__" not in f.parts and ".pytest_cache" not in f.parts and ".ipynb_checkpoints" not in f.parts:
+            if f.is_file() and "__pycache__" not in f.parts and ".pytest_cache" not in f.parts and ".ipynb_checkpoints" not in f.parts and not (f.relative_to(repo).parts[:2] == ("paper", "build")):
                 yield f
 
 
@@ -52,8 +52,11 @@ def precheck(repo: Path, executed_notebooks: Path | None = None) -> dict:
         rel = f.relative_to(repo)
         if f.is_symlink():
             problems.append(f"symlink: {rel}"); continue
-        if f.name in FORBIDDEN_NAMES or f.suffix in FORBIDDEN_EXT:
+        paper_archive = rel.parts[0] == "paper" and f.suffix == ".zip" and f.name.startswith("CAPE-EEG_NSysS2026")
+        if f.name in FORBIDDEN_NAMES or (f.suffix in FORBIDDEN_EXT and not paper_archive):
             problems.append(f"forbidden file: {rel}"); continue
+        if paper_archive:
+            files.append({"path": str(rel), "bytes": f.stat().st_size, "sha256": file_sha256(f)}); total += f.stat().st_size; continue
         if f.suffix not in ALLOWED_EXT:
             problems.append(f"extension not allowlisted: {rel}"); continue
         size = f.stat().st_size; total += size

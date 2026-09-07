@@ -21,3 +21,7 @@ train_spectrograms/
 test_eegs/
 test_spectrograms/
 example_figures/
+
+# LaTeX intermediates
+paper/build/
+!paper/CAPE-EEG_NSysS2026_latex_source.zip

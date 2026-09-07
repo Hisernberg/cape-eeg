@@ -1,0 +1,416 @@
+%% CAPE-EEG manuscript for NSysS 2026 (ACM sigconf, 9 pages incl. references).
+%% Build: tectonic submission.tex (double-blind) or tectonic camera.tex (author version).
+\ifdefined\ANONYMOUS
+  \documentclass[sigconf,anonymous]{acmart}
+\else
+  \documentclass[sigconf]{acmart}
+\fi
+\usepackage{booktabs}
+\usepackage{subcaption}
+\usepackage{tikz}
+\usetikzlibrary{positioning,arrows.meta,shapes.geometric,calc,fit,backgrounds}
+\usepackage{xcolor}
+\emergencystretch=2.5em
+\hyphenation{pre-regis-tered spectro-gram spectro-grams para-meters annota-tor annota-tors calibra-tion re-pro-duc-ible}
+\settopmatter{printacmref=false}
+\setcopyright{none}
+\renewcommand\footnotetextcopyrightpermission[1]{}
+\acmConference[NSysS '26]{13th International Conference on Next Generation Computing, Communication, Systems and Security}{December 17--19, 2026}{Dhaka, Bangladesh}
+\acmYear{2026}
+\copyrightyear{2026}
+\acmDOI{}
+\acmISBN{}
+
+\definecolor{cblue}{HTML}{1F77B4}
+\definecolor{corange}{HTML}{E8710A}
+\definecolor{cgreen}{HTML}{2CA02C}
+\definecolor{cgrey}{HTML}{F2F2F2}
+
+\newcommand{\kl}{\mathrm{KL}}
+\newcommand{\ci}[2]{[#1,\,#2]}
+\ifdefined\ANONYMOUS
+  \newcommand{\repourl}{an anonymised repository}
+\else
+  \newcommand{\repourl}{\url{https://github.com/Hisernberg/cape-eeg}}
+\fi
+
+\begin{document}
+
+\title[When Compact Is Not Enough: Pre-Registered Evaluation of Foveated Two-View EEG Models]{When Compact Is Not Enough: A Pre-Registered, Byte-Budgeted Evaluation of Foveated Two-View EEG Models for Harmful Brain Activity Classification}
+
+\author{Nabid Nur}
+\affiliation{%
+  \institution{Independent Researcher}
+  \city{Dhaka}
+  \country{Bangladesh}}
+
+\renewcommand{\shortauthors}{Nur}
+
+\begin{abstract}
+Continuous EEG monitoring in intensive care produces expert labels that disagree, and next-generation clinical systems must estimate the \emph{distribution} of expert opinion on small, auditable hardware. We present CAPE-EEG, a pre-registered study of whether a 164k-parameter two-view convolutional model can match a small ImageNet-pretrained network when both consume the same byte-capped evidence. Each labelled 10-second window is represented by a \emph{foveated} log-spectrogram of the surrounding 50-second raw EEG (half of the 32 time bins on the labelled centre) and a 64$\times$64 summary of the supplied 10-minute spectrogram, stored as float16 with bit-packed validity masks in a 5.58\,GB cache. The candidate fuses the two views with a learned gate and predicts observed annotator disagreement as an auxiliary target. On 106,800 windows from 1,950 patients of the HMS Harmful Brain Activity dataset we froze a patient-disjoint 60/10/5/5/20 split, capped development at eight named configurations, locked the comparator, schedule and referral score before any test access, and evaluated once. The candidate is \emph{inferior}: three-seed patient-mean KL divergence is 0.934 versus 0.869 for MobileNetV3-Small on identical inputs (paired difference $+0.066$, 95\% bootstrap CI $[+0.033,+0.097]$, 391 patients), and matched ablations show that foveation, the learned gate and the disagreement loss each change tune loss by at most 0.015. The audits are the durable contribution: temperature scaling removes over-confidence, entropy-based referral lowers accepted-case risk, evidence deletion confirms the model relies on the labelled raw-EEG window, and the compact model is three times less sensitive than the pretrained network to a change of STFT resolution. The entire study consumed 0.72 GPU-hours, and code, tests, executed notebooks and twenty provenance-tracked figures are released.
+\end{abstract}
+
+\begin{CCSXML}
+<ccs2012>
+<concept><concept_id>10010147.10010257</concept_id><concept_desc>Computing methodologies~Machine learning</concept_desc><concept_significance>500</concept_significance></concept>
+<concept><concept_id>10010405.10010444.10010449</concept_id><concept_desc>Applied computing~Health informatics</concept_desc><concept_significance>300</concept_significance></concept>
+<concept><concept_id>10002944.10011122.10002945</concept_id><concept_desc>General and reference~Reliability</concept_desc><concept_significance>300</concept_significance></concept>
+</ccs2012>
+\end{CCSXML}
+\ccsdesc[500]{Computing methodologies~Machine learning}
+\ccsdesc[300]{Applied computing~Health informatics}
+\ccsdesc[300]{General and reference~Reliability}
+
+\keywords{EEG, harmful brain activity, soft labels, expert disagreement, compact neural networks, pre-registration, calibration, robustness, edge inference}
+
+\maketitle
+
+\section{Introduction}
+Intensive-care EEG is read for seizures and for the rhythmic and periodic patterns that surround them: lateralised and generalised periodic discharges (LPD, GPD) and lateralised and generalised rhythmic delta activity (LRDA, GRDA). Even expert readers disagree about these patterns, so the largest public dataset of such annotations, HMS Harmful Brain Activity Classification, scores models against the \emph{vote distribution} of up to 28 experts with the Kullback--Leibler divergence rather than against a single label \cite{hms2024,jing2023}. This changes what a good model is: it must be calibrated, it must know when to defer, and its evidence use must be auditable, because the ``ground truth'' is itself a disagreement.
+
+Systems that would run such models next to a bedside monitor are constrained in a way that leaderboard solutions are not. Memory and storage are bounded, one small accelerator is shared, and every trained artefact has to be reproducible and inspectable. Two ideas from recent computer vision appear well suited to this regime. Foveated representations spend resolution where the label lives \cite{akbas2017foveated}, and economical multi-scale fusion \cite{kang2026dpnext} combines views without a large backbone. At the same time, recent EEG work warns that preprocessing choices silently move predictions \cite{hou2026samebrain}, that foundation models are not automatically better than task-matched controls \cite{kontras2026neuroatlas}, that purported evidence should be tested by deletion \cite{wang2026evidence}, and that robustness must be measured under declared perturbations \cite{mohammadi2026robustseiz}.
+
+This paper asks a narrow, falsifiable question. \emph{At a fixed cache byte budget and a bounded single-device training budget, does preserving the labelled temporal centre and learning how to combine local EEG-derived spectra with longer spectral context improve prediction of expert votes on unseen patients, relative to a small pretrained convolutional network that sees exactly the same bytes?} We answer it with a study that was specified before the data were touched and that reports its negative result together with the audits that make the answer useful.
+
+Our contributions are:
+\begin{enumerate}
+\item \textbf{A pre-registered, leak-free protocol} for expert-vote EEG classification: connected-component patient/recording split, a 6\,GB active-cache cap with masks and metadata counted, at most eight named development configurations, a written protocol lock, three fixed seeds averaged as losses, and a single test evaluation with patient-cluster bootstrap inference \cite{nosek2018preregistration,efron1979bootstrap}.
+\item \textbf{CAPE-EEG}, a 164k-parameter two-view model with byte-matched temporal foveation, a learned inspectable view gate and an annotation-disagreement auxiliary head, together with its exact byte- and exposure-matched controls.
+\item \textbf{A resolved negative result.} The candidate is inferior to MobileNetV3-Small on identical inputs by $+0.066$ patient-mean KL (CI wholly above zero); none of the three mechanisms helps in matched ablations; a multi-scale fusion variant hurts.
+\item \textbf{Audits that survive the negative result:} calibration, referral, disagreement prediction, sixteen prespecified subgroups, a six-condition corruption suite, evidence-deletion tests and measured latency, all with patient-cluster intervals.
+\item \textbf{An open, tested release} (155 synthetic tests, seven executed notebooks, twenty figures with provenance sidecars) at \repourl.
+\end{enumerate}
+
+\section{Related Work}
+\textbf{HMS and vision-inspired classifiers.} Jing et al.\ \cite{jing2023} showed that a deep model can reach expert-level agreement on the six-pattern task; the public HMS release \cite{hms2024} operationalised it as vote-distribution prediction scored by KL. VIPEEGNet \cite{sun2025vipeegnet} reports strong KL with an ImageNet-pretrained backbone on spectrogram images; its cohort and split differ from ours and its scores are therefore not comparable. Our comparator B3 is the smallest member of that family, MobileNetV3-Small \cite{howard2019mobilenetv3}, chosen so that the comparison is about representation rather than scale.
+
+\textbf{Compact architectures and fusion.} Depthwise-separable convolutions \cite{howard2017mobilenets} and Group Normalisation \cite{wu2018groupnorm} make sub-200k-parameter trunks trainable at small batch sizes. DPNeXt \cite{kang2026dpnext} shows that inexpensive multi-scale fusion can replace heavy decoders for dense prediction; we borrow only the principle, as an exploratory block, and find it harmful here.
+
+\textbf{Soft labels, calibration and deferral.} Learning from the full distribution of human judgements improves robustness and calibration \cite{peterson2019human}; temperature scaling \cite{guo2017calibration} is the minimal post-hoc calibrator we allow, fitted on a partition that never trains weights. Selective classification \cite{geifman2017selective} motivates the risk--coverage analysis in which a frozen input-only score decides which windows to refer.
+
+\textbf{Reliability of EEG decoding.} The 2026 preprocessing-sensitivity, benchmark, evidence-bottleneck and robustness studies \cite{hou2026samebrain,kontras2026neuroatlas,wang2026evidence,mohammadi2026robustseiz} motivate, respectively, our declared STFT-resolution condition, our task-matched controls, our deletion audits and our corruption suite. None is reproduced; each is a reason a specific test exists.
+
+\section{Data and Task}
+\label{sec:data}
+The source is the original HMS training release: 106,800 labelled windows from 1,950 patients, 17,089 EEG recordings (200\,Hz, 19 scalp electrodes and one EKG channel, 50\,s to 56\,min long) and 11,138 spectrograms (2\,s rows, four regions $\times$ 100 frequencies from 0.59 to 19.92\,Hz). Each row gives an EEG offset $e$ and a spectrogram offset $s$: the labelled centre is seconds $[e{+}20,e{+}30)$ of the recording and $[s{+}295,s{+}305)$ of the spectrogram, and the two clocks are not the same \cite{hms2024}. All offsets lie on the sample grid. Votes $v_{ik}\ge 0$ over the six classes have total $n_i\in[1,28]$; 4,360 windows carry a single vote and 5,248 have tied maxima. The target is $q_{ik}=v_{ik}/n_i$.
+
+\begin{table}[t]
+\caption{Frozen partitions (patient/recording connected components, seed 20260907). No patient, EEG or spectrogram appears in two partitions.}
+\label{tab:partitions}
+\small
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{lrrrl}
+\toprule
+Partition & Rows & Patients & Share & Role \\
+\midrule
+Train & 64,292 & 1,170 & 0.602 & development fits \\
+Tune & 10,667 & 196 & 0.100 & comparator, epochs, score \\
+Calibration-T & 5,289 & 95 & 0.050 & temperature only \\
+Calibration-P & 5,247 & 98 & 0.049 & referral thresholds \\
+Locked test & 21,305 & 391 & 0.200 & one evaluation \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The prediction unit is a window; the independence unit is the patient. Because no recording is shared across patients, the 1,950 connected components coincide with patients, and all intervals in this paper resample patients. Table~\ref{tab:partitions} gives the deterministic allocation, which balanced rows, per-class vote mass and component counts without consulting any model.
+
+\section{CAPE-EEG}
+\subsection{Byte-budgeted two-view evidence}
+\label{sec:cache}
+Every window is reduced to two float16 tensors. The \textbf{local view} $L\in\mathbb{R}^{4\times 64\times 32}$ comes from the 50\,s raw window: sixteen bipolar leads in four regional chains (LL, RL, LP, RP), per-lead median removal, a Hann STFT (256-sample window, hop 64, no boundary padding, 153 frames), linear power averaged over valid leads of a region, overlap-weighted integration into 64 linear frequency bins over 0.5--40\,Hz and 32 time bins, and a final logarithm. In the \emph{foveated} encoding the time bins cover $[0,20)$\,s with 8 bins, the labelled centre $[20,30)$\,s with 16 bins and $[30,50)$\,s with 8 bins; the \emph{uniform} control uses 32 equal bins. Both cost exactly the same bytes. The \textbf{context view} $C\in\mathbb{R}^{4\times 64\times 64}$ integrates the supplied 600\,s spectrogram interval onto 64 frequency and 64 time bins per region. Each cell carries a validity bit: a frame needs at least 90\% observed samples and at least two valid leads, a bin needs at least half of its weight from valid frames, and non-finite supplied cells are invalid. Truncated edges are masked, never shifted.
+
+One row therefore occupies $4\times 64\times 96\times 2 = 49{,}152$ bytes of values and 3,072 bytes of masks. The realised cache holds 106,800 rows in 5.582\,GB, below the 6\,GB cap, plus a 1.859\,GB development-only uniform alternate; float16 storage changes log-power by at most 0.0076. Conversion took 786\,s with 16 CPU workers whose resident memory never exceeded 0.77\,GiB. Figure~\ref{fig:align} shows the alignment audit that every cache had to pass: a synthetic 3\,Hz burst confined to seconds 22--28 must land in foveated columns 8--23 and in the 3\,Hz bin.
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=0.9\linewidth]{figures/v05_temporal_alignment.png}
+\caption{Temporal alignment audit. Foveated bins are drawn with their true non-uniform widths; the labelled centre is $[20,30)$\,s in the raw view and $[s{+}295,s{+}305)$\,s in the supplied spectrogram. A synthetic impulse verifies the index arithmetic before any patient data are converted.}
+\label{fig:align}
+\end{figure}
+
+\subsection{Architecture}
+\begin{figure}[t]
+\centering
+\begin{tikzpicture}[
+  font=\scriptsize, >={Stealth[length=4pt]}, node distance=3.5mm and 4mm,
+  box/.style={draw, rounded corners=2pt, fill=cgrey, minimum height=4.6mm, inner sep=2.5pt, align=center},
+  view/.style={box, fill=cblue!15},
+  head/.style={box, fill=corange!18},
+  gate/.style={box, fill=cgreen!18}]
+\node[view] (L) {local view $L$\\$4{\times}64{\times}32$};
+\node[view, right=12mm of L] (C) {context view $C$\\$4{\times}64{\times}64$};
+\node[box, below=of L] (sL) {stem$_L$ 3$\times$3, 4$\to$24};
+\node[box, below=of C] (sC) {stem$_C$ 3$\times$3, 4$\to$24};
+\node[box, below=5mm of $(sL)!0.5!(sC)$, text width=52mm] (trunk) {\textbf{shared trunk} (depthwise-separable, GroupNorm)\\$24\!\to\!48\!\to\!64\!\to\!96\!\to\!128$, strides $(2,1),(2,2),(2,2),(1,1)$ + 2 residual};
+\node[box, below left=5mm and -14mm of trunk] (pL) {pool: mean $\|$ max $\|$ centre$_w$\\proj $384\to128$: $u_L$};
+\node[box, below right=5mm and -14mm of trunk] (pC) {pool: mean $\|$ max\\proj $256\to128$: $u_C$};
+\node[head, below=of pL] (hL) {head$_L$: $p_L$};
+\node[head, below=of pC] (hC) {head$_C$: $p_C$};
+\node[gate, below=5mm of $(hL)!0.5!(hC)$, text width=52mm] (g) {gate $g=\sigma(\mathrm{MLP}[u_L,u_C,\text{valid}_L,\text{valid}_C,\mathrm{JS}(p_L,p_C)])$\\$p=(1-g)\,p_L+g\,p_C$ \quad (missing view forces $g\in\{0,1\}$)};
+\node[head, right=2mm of g, text width=17mm] (aux) {$\hat d=\sigma(\mathrm{MLP}[u_L,u_C])$\\aux, train only};
+\draw[->] (L)--(sL); \draw[->] (C)--(sC);
+\draw[->] (sL.south)--(trunk.north -| sL.south); \draw[->] (sC.south)--(trunk.north -| sC.south);
+\draw[->] (trunk.south -| pL.north)--(pL.north); \draw[->] (trunk.south -| pC.north)--(pC.north);
+\draw[->] (pL)--(hL); \draw[->] (pC)--(hC);
+\draw[->] (hL.south)--(g.north -| hL.south); \draw[->] (hC.south)--(g.north -| hC.south);
+\draw[->, dashed] (pL.east) to[out=0,in=150] (aux.north west);
+\draw[->, dashed] (pC.east) to[out=0,in=170] (aux.north);
+\end{tikzpicture}
+\caption{CAPE-EEG (164,134 parameters). Two stems feed one shared trunk; the local branch adds a centre-weighted pool whose weights come from the true bin edges of the encoding in use; a learned gate mixes the two class distributions; a disagreement head is supervised only during training. Ablations remove the gate (fixed 50:50), the auxiliary head, or the foveation.}
+\label{fig:arch}
+\end{figure}
+
+Figure~\ref{fig:arch} shows the candidate. Each view has its own $3\times 3$ stem (4$\to$24 channels) and both share a depthwise-separable trunk with 24, 48, 64, 96 and 128 channels, frequency/time strides of (2,1), (2,2), (2,2) and (1,1), and two residual 128-channel blocks; GroupNorm avoids batch statistics. Local pooling concatenates the global mean, the global maximum and a centre-region mean whose column weights are the overlap of each bin with $[20,30)$\,s, so that the uniform control pools its \emph{true} centre rather than columns 8--23. Context pooling uses mean and maximum. Linear projections give $u_L,u_C\in\mathbb{R}^{128}$ and independent heads give $p_L$ and $p_C$. The gate $g$ sees the two embeddings, the two valid fractions and the Jensen--Shannon divergence between $p_L$ and $p_C$; no identifier, vote count or label enters the network at inference. An unavailable view forces $g$ to the surviving path. Heads, gate and mixture run in float32 even under bf16 autocast.
+
+\subsection{Losses}
+For window $i$ the classification loss is the soft cross-entropy $-\sum_k q_{ik}\log p_{ik}$ on the mixture, whose optimum equals that of $\kl(q_i\|p_i)$. Observed pairwise annotator disagreement $d_i = 1-\sum_k v_{ik}(v_{ik}-1)/[n_i(n_i-1)]$ is defined only for $n_i>1$ and is not clipped to its population maximum of $5/6$. The total loss is $\overline{\mathrm{CE}} + 0.1\cdot\overline{(\hat d_i - d_i)^2}_{\,n_i>1}$, with a differentiable zero when a mini-batch has no multi-annotator window. No class weighting, vote weighting, focal loss or label sharpening is used.
+
+\subsection{Baselines and named configurations}
+\label{sec:configs}
+B0 is the training-set vote prior; B1 is an L2-regularised multinomial logistic regression on 74 fixed band-power features fitted to fractional targets on the CPU. B2 is the byte-matched conventional control: the same trunk on the uniform local encoding with a fixed 50:50 mixture and no auxiliary head (147,524 parameters). A1 adds foveation, A2 adds the learned gate, and P adds the auxiliary loss. B3 is MobileNetV3-Small \cite{howard2019mobilenetv3,wightman2019timm} with four input channels and six outputs, fed the two normalised views concatenated along time (64$\times$96) and bilinearly resized to 128$\times$192 (1,524,150 parameters). P+MSF is an exploratory variant whose last residual block is replaced by an economical multi-scale fusion block (parallel depthwise convolutions with temporal dilations 1/2/3, a $1\times 1$ fusion and a channel gate; 208,070 parameters). Only B2 and B3 may become the comparator, and the choice is made on tune data.
+
+\subsection{Training}
+All configurations use AdamW \cite{loshchilov2019adamw} (weight decay 0.01), learning rate $10^{-3}$ for compact models and $10^{-4}$/$10^{-3}$ for the pretrained backbone/head with one frozen-backbone epoch, cosine decay with 200 warm-up steps, batch 64, gradient clipping at 1.0, bf16 autocast after a parity test (maximum $|\Delta p|=0.005$), and mild augmentation only: Gaussian gain jitter, frequency masking of at most four bins, and single-region dropout with probability 0.1. Normalisation statistics (per view and region, median and scaled MAD of valid cells) are fitted on the training partition only, refitted on train+tune for the final phase; invalid cells are zeroed \emph{after} normalisation.
+
+\section{Pre-Registered Protocol}
+\label{sec:protocol}
+\begin{figure*}[t]
+\centering
+\resizebox{\textwidth}{!}{%
+\begin{tikzpicture}[
+  font=\scriptsize, >={Stealth[length=4pt]}, node distance=2.2mm and 3mm,
+  st/.style={draw, rounded corners=2pt, fill=cgrey, minimum height=9mm, text width=24mm, align=center, inner sep=2pt},
+  dev/.style={st, fill=cblue!14}, lock/.style={st, fill=corange!22, draw=corange!80!black, thick}, fin/.style={st, fill=cgreen!16}]
+\node[st] (a) {\textbf{source audit}\\schema gate, checksums,\\offset-grid \& alignment tests};
+\node[st, right=of a] (b) {\textbf{component split}\\60/10/5/5/20, seed fixed,\\5$\times$5 overlap = 0};
+\node[st, right=of b] (c) {\textbf{byte-capped cache}\\float16 + packed masks\\5.58 GB $\le$ 6 GB};
+\node[dev, right=of c] (d) {\textbf{development}\\$\le 8$ named configs\\train $\to$ tune only};
+\node[lock, right=of d] (e) {\textbf{protocol lock}\\comparator, schedule,\\referral score, strata, figures};
+\node[fin, right=of e] (f) {\textbf{final refits}\\train+tune, 3 seeds,\\complete schedule};
+\node[fin, right=of f] (g) {\textbf{calibration}\\T on Cal-T\\thresholds on Cal-P};
+\node[lock, right=of g] (h) {\textbf{locked test}\\evaluated once;\\paired bootstrap};
+\draw[->] (a)--(b); \draw[->] (b)--(c); \draw[->] (c)--(d); \draw[->] (d)--(e); \draw[->] (e)--(f); \draw[->] (f)--(g); \draw[->] (g)--(h);
+\node[below=1.5mm of d, text width=24mm, align=center] {\textcolor{cblue!80!black}{GPU ledger: 0.53 h}};
+\node[below=1.5mm of f, text width=24mm, align=center] {\textcolor{cgreen!60!black}{0.19 h, 9 fits}};
+\node[below=1.5mm of h, text width=24mm, align=center] {\textcolor{corange!80!black}{test-access log}};
+\end{tikzpicture}}
+\caption{The protocol as executed. Every stage writes a hash (split \texttt{4455edaa}, preprocess \texttt{2406ce59}, cache \texttt{af515c77}, protocol \texttt{380269a4}); a development role cannot read the test partition, and the evaluator role runs once after the lock.}
+\label{fig:protocol}
+\end{figure*}
+
+Figure~\ref{fig:protocol} summarises the study as it ran. The development phase may fit at most eight named configurations on the training partition and select on tune; the only permitted optimiser pilots are a learning-rate multiplier of 0.3 and a common shorter epoch count. The lock then freezes the comparator (the better of B2 and B3 on tune), the final schedule, the referral score (the lowest area under the risk--coverage curve on tune among predictive entropy, one-minus-maximum-probability and $\hat d$), target-entropy tertiles, sixteen subgroups, the six corruption conditions and the figure list. Final models are refit on train+tune for the frozen number of epochs with seeds 101, 202 and 303; seed 101 is the deployment exemplar chosen in advance. A scalar temperature is fitted on Calibration-T by patient-weighted cross-entropy, referral thresholds for 80/90/95\% acceptance are fixed on Calibration-P, and the test partition is read once.
+
+The primary estimand is $\Delta = \bar K_P - \bar K_B$, where $\bar K_m$ is the mean over patients of the patient-mean $\kl(q\|p)$ (natural log, $p$ clipped at $10^{-7}$ and renormalised), averaged over the three single-model seeds---an algorithm comparison, not an ensemble. Superiority requires the 95\% percentile interval of 2,000 paired patient-bootstrap replicates to lie wholly below zero; an interval crossing zero is inconclusive. Secondary outcomes are row-weighted KL, soft cross-entropy, soft squared error, expected categorical Brier score, hard-label metrics on the 20,482 unique-majority windows (823 ties excluded), soft and majority top-label expected calibration error with ten equal-count bins and a twenty-group merge rule, disagreement MSE and Spearman correlation by vote stratum, risk--coverage curves, six corruption conditions on a label-blind subset of 777 test windows from all 391 patients, view/region deletion and ranked-versus-random occlusion on 48 prespecified cases, and measured latency and memory. All GPU wall time, including smoke tests, is charged to a 12-hour ledger.
+
+\section{Results}
+\subsection{Development phase and the schedule finding}
+\begin{table}[t]
+\caption{Development results (tune partition, seed 101). All models reach their best tune loss within three epochs of the 12-epoch schedule; the two permitted pilots run a complete 3-epoch cosine schedule, which was frozen for the final refits.}
+\label{tab:dev}
+\footnotesize
+\setlength{\tabcolsep}{3.5pt}
+\begin{tabular}{llrrl}
+\toprule
+ID & Configuration & Params & Tune KL & Schedule \\
+\midrule
+B0 & vote prior & 0 & 1.410 & -- \\
+B1 & band-power regression & 450 & 1.241 & LBFGS \\
+B2 & uniform, fixed fusion & 147,524 & 0.986 & 12 ep (best 2) \\
+A1 & B2 + foveation & 147,524 & 1.001 & 12 ep (best 2) \\
+A2 & A1 + learned gate & 155,877 & 0.990 & 12 ep (best 1) \\
+P & A2 + disagreement aux & 164,134 & 0.983 & 12 ep (best 2) \\
+P+MSF & P + multi-scale block & 208,070 & 0.988 & 12 ep (best 1) \\
+B3 & MobileNetV3-Small & 1,524,150 & 0.896 & 12 ep (best 3) \\
+\midrule
+P$_3$ & pilot 7 & 164,134 & \textbf{0.927} & 3 ep, complete \\
+B3$_3$ & pilot 8 & 1,524,150 & \textbf{0.927} & 3 ep, complete \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Table~\ref{tab:dev} reports the eight named configurations. Deep models beat the CPU feature baseline by 0.25 KL, confirming that representation learning is needed. Every network, compact or pretrained, reaches its best tune loss after one to three epochs and then memorises patient-specific structure: with a median of 19 windows per patient, 64k rows behave like far fewer independent examples. Because a final refit must run a \emph{complete} schedule without tune-based checkpoint selection, we spent the two remaining named configurations on the plan's ``common shorter epoch count'' pilot: a complete 3-epoch cosine schedule. It improved P from 0.983 to 0.927 and left B3 at 0.927; the lock therefore recorded B3 as comparator, 3 epochs as the schedule and predictive entropy as the referral score (tune AURC 0.402 versus 0.407 for one-minus-maximum and 0.436 for $\hat d$). The development paired standard deviation of 0.58 implied a minimum detectable difference of 0.083 KL at 80\% power on 391 test patients.
+
+\subsection{Primary confirmatory result}
+\begin{figure}[t]
+\centering
+\includegraphics[width=0.86\linewidth]{figures/v09_paired_delta_kl.png}
+\caption{Primary result on the locked test. Per-patient paired differences in calibrated patient-mean KL (P $-$ B3, averaged over three seeds) and the bootstrap interval of their mean. Negative values would favour the candidate.}
+\label{fig:primary}
+\end{figure}
+
+\begin{table*}[t]
+\caption{Locked-test metrics, three-seed means (per-seed values in the repository). ``Cal'' = scalar temperature from Calibration-T. Hard-label metrics use the 20,482 unique-majority windows. Lower is better for KL, CE, SE, Brier and ECE.}
+\label{tab:test}
+\footnotesize
+\setlength{\tabcolsep}{3.5pt}
+\begin{tabular}{lrrrrrrrrrrrr}
+\toprule
+Method & Params & Patient KL & Row KL & KL$_{\ge 10\,\text{votes}}$ & Soft CE & Brier & Macro AUROC & Macro AUPRC & Bal.\ acc. & Macro F1 & MCC & Soft ECE \\
+\midrule
+B3 raw & 1,524,150 & 0.943 & 0.869 & 0.754 & 1.230 & 0.592 & 0.884 & -- & 0.576 & -- & -- & 0.107 \\
+B3 cal & & \textbf{0.869} & \textbf{0.807} & \textbf{0.666} & \textbf{1.168} & \textbf{0.578} & \textbf{0.884} & \textbf{0.656} & \textbf{0.576} & \textbf{0.580} & \textbf{0.509} & \textbf{0.036} \\
+P raw & 164,134 & 0.991 & 0.961 & 0.819 & 1.322 & 0.642 & 0.856 & -- & 0.523 & -- & -- & 0.118 \\
+P cal & & 0.934 & 0.906 & 0.744 & 1.267 & 0.625 & 0.857 & 0.580 & 0.523 & 0.520 & 0.446 & 0.051 \\
+P+MSF cal & 208,070 & 0.958 & 0.925 & 0.738 & 1.286 & 0.634 & 0.849 & 0.561 & 0.506 & 0.502 & 0.428 & 0.040 \\
+\bottomrule
+\end{tabular}
+\end{table*}
+
+
+\begin{table*}[t]
+\caption{Per-seed locked-test results (temperature-calibrated) and per-class one-vs-rest AUROC on unique-majority windows. $T$ is the temperature fitted on Calibration-T; $\bar g$ is the mean gate value on the test partition; AURC is the area under the KL risk--coverage curve for coverage 0.5--1.0 with the frozen entropy score.}
+\label{tab:seeds}
+\small
+\begin{tabular}{llrrrrrr|rrrrrr}
+\toprule
+Method & Seed & $T$ & Patient KL & Row KL & Bal.\ acc. & $\bar g$ & AURC & Seizure & LPD & GPD & LRDA & GRDA & Other \\
+\midrule
+P  & 101 & 1.221 & 0.9235 & 0.8886 & 0.537 & 0.45 & 0.401 & 0.885 & 0.873 & 0.925 & 0.801 & 0.900 & 0.782 \\
+P  & 202 & 1.386 & 0.9546 & 0.9142 & 0.508 & 0.72 & 0.406 & 0.887 & 0.859 & 0.926 & 0.788 & 0.903 & 0.767 \\
+P  & 303 & 1.210 & 0.9244 & 0.9140 & 0.523 & 0.43 & 0.415 & 0.889 & 0.847 & 0.913 & 0.808 & 0.895 & 0.779 \\
+\midrule
+B3 & 101 & 1.333 & 0.8776 & 0.8085 & 0.572 & -- & 0.365 & 0.915 & 0.903 & 0.932 & 0.813 & 0.915 & 0.819 \\
+B3 & 202 & 1.279 & 0.8564 & 0.8018 & 0.571 & -- & 0.366 & 0.916 & 0.910 & 0.915 & 0.837 & 0.923 & 0.805 \\
+B3 & 303 & 1.299 & 0.8715 & 0.8094 & 0.585 & -- & 0.372 & 0.917 & 0.909 & 0.918 & 0.845 & 0.915 & 0.808 \\
+\midrule
+P+MSF & 101 & 1.419 & 0.9478 & 0.9331 & 0.491 & 0.67 & 0.427 & 0.874 & 0.847 & 0.903 & 0.772 & 0.906 & 0.768 \\
+P+MSF & 202 & 1.429 & 0.9568 & 0.9112 & 0.520 & 0.73 & 0.406 & 0.887 & 0.868 & 0.915 & 0.780 & 0.897 & 0.762 \\
+P+MSF & 303 & 1.349 & 0.9696 & 0.9299 & 0.509 & 0.61 & 0.419 & 0.880 & 0.850 & 0.913 & 0.786 & 0.888 & 0.781 \\
+\bottomrule
+\end{tabular}
+\end{table*}
+The pre-registered hypothesis is rejected (Figure~\ref{fig:primary}, Table~\ref{tab:test}). With calibrated predictions the paired difference is $\Delta = +0.0657$, 95\% CI $\ci{+0.0334}{+0.0973}$, so the candidate is inferior; the uncalibrated secondary estimate agrees ($+0.0485$, $\ci{+0.0059}{+0.0899}$). Per-seed calibrated patient-mean KL is 0.924, 0.955 and 0.924 for P and 0.878, 0.856 and 0.872 for B3; 35.3\% of patients are better predicted by the candidate. The observed effect lies inside a well-resolved interval, so the result is not a power failure. B3 leads on every secondary metric, including macro AUROC (0.884 versus 0.857), macro AUPRC (0.656 versus 0.580) and expected Brier score. Per-class AUROC for seed 101 (Seizure/LPD/GPD/LRDA/GRDA/Other) is given in Table~\ref{tab:seeds}; LRDA is hardest for both, with recall below 0.32 and confusions to GRDA and Other.
+
+\subsection{Mechanism ablations}
+\begin{figure}[t]
+\centering
+\includegraphics[width=0.8\linewidth]{figures/v19_mechanism_ablation.png}
+\caption{Byte- and exposure-matched mechanism deltas on tune (seed 101). Foveation, the learned gate and the disagreement loss are each within $\pm 0.015$ KL of their control; the pretrained comparator's advantage is six times larger.}
+\label{fig:ablation}
+\end{figure}
+Figure~\ref{fig:ablation} isolates the three interventions at identical bytes, trunk, schedule and augmentation. Foveation changes tune KL by $+0.015$ (A1$-$B2), the learned gate by $-0.011$ (A2$-$A1) and the auxiliary loss by $-0.007$ (P$-$A2); all three together give $-0.003$. These are single-seed pilots, so no interval is drawn, but each is an order of magnitude smaller than the B3$-$B2 gap of $-0.090$. On the locked test the exploratory multi-scale block is significantly worse than P ($+0.024$, $\ci{+0.001}{+0.045}$) and than B3 ($+0.090$, $\ci{+0.057}{+0.122}$).
+
+\subsection{Calibration, referral and disagreement}
+Both architectures are over-confident when trained with soft cross-entropy: temperatures fitted on Calibration-T range from 1.21 to 1.39 for P and from 1.28 to 1.33 for B3 (Table~\ref{tab:seeds}), none at a bound, and scaling cuts soft top-label ECE from 0.10--0.14 to 0.03--0.06 and patient-mean KL by 0.046--0.081 for every model and seed (Figure~\ref{fig:calib}). With entropy as the frozen referral score and thresholds fixed on Calibration-P, referring 11.8\% of test windows lowers P's accepted-case patient KL from 0.923 to 0.911 (seed 101); for B3, referring 9.1\% lowers it from 0.878 to 0.874. Area under the risk--coverage curve over coverage 0.5--1.0 is 0.401--0.415 for P and 0.365--0.372 for B3 across seeds. The disagreement head predicts observed pairwise annotator disagreement with Spearman 0.31, 0.26 and 0.25 across seeds (MSE 0.088--0.094 on 20,795 estimable windows) and 0.23--0.24 within each vote-count stratum; as a referral score it is worse than entropy (AURC 0.444--0.448). The gate's mean is 0.45, 0.72 and 0.43 for the three seeds (Table~\ref{tab:seeds}), with a 5th--95th percentile range of 0.08--0.85 for seed 101: the model mixes views rather than collapsing to one, but the mixture is seed-dependent, which is one source of the candidate's larger seed spread (SD 0.018 versus 0.011).
+
+\begin{figure*}[t]
+\centering
+\begin{subfigure}[t]{0.48\textwidth}
+\includegraphics[width=\linewidth]{figures/v13_calibration_reliability.png}
+\caption{Reliability before and after temperature scaling.}
+\end{subfigure}\hfill
+\begin{subfigure}[t]{0.48\textwidth}
+\includegraphics[width=\linewidth]{figures/v15_risk_coverage.png}
+\caption{Risk--coverage with frozen operating points.}
+\end{subfigure}
+\caption{Calibration and review prioritisation on the locked test (patient-cluster bands).}
+\label{fig:calib}
+\end{figure*}
+
+\subsection{Prespecified subgroups}
+Across the sixteen frozen strata (Table~\ref{tab:strata} in the appendix; exploratory, paired patient bootstrap), the comparator's advantage concentrates in confident windows and in LPD: $\Delta=+0.079$ $\ci{+0.027}{+0.129}$ for windows with at least ten votes, $+0.073$ $\ci{+0.028}{+0.116}$ for unanimous windows, $+0.179$ $\ci{+0.046}{+0.308}$ for LPD-majority windows and $+0.119$ $\ci{+0.029}{+0.206}$ for windows with fewer than 95\% valid cells. On high-entropy windows ($+0.019$, $\ci{-0.033}{+0.071}$), LRDA ($-0.028$, $\ci{-0.154}{+0.093}$), GPD, GRDA, seizure and tied-majority windows the two models are statistically indistinguishable; single-vote windows have low support (28 patients).
+
+
+\subsection{Robustness under declared perturbations}
+\begin{table*}[t]
+\caption{Six-condition stress suite on 777 label-blind test windows from 391 patients: change in calibrated patient-mean KL versus the clean input (paired patient bootstrap), fraction of argmax flips, and Jensen--Shannon distance from the clean prediction.}
+\label{tab:robust}
+\small
+\begin{tabular}{lrrrrrr}
+\toprule
+Condition & P $\Delta$KL [95\% CI] & P flips & P JS & B3 $\Delta$KL [95\% CI] & B3 flips & B3 JS \\
+\midrule
+Left-lateral region removed (both views) & $+0.084$ $[+0.038,+0.131]$ & 0.31 & 0.20 & $+0.053$ $[+0.002,+0.102]$ & 0.33 & 0.20 \\
+Additional 10\% contiguous time mask & $-0.000$ $[-0.026,+0.024]$ & 0.16 & 0.10 & $-0.007$ $[-0.035,+0.023]$ & 0.17 & 0.11 \\
+Mild gain shift ($+0.5$ log-power) & $+0.008$ $[-0.010,+0.027]$ & 0.12 & 0.08 & $-0.003$ $[-0.022,+0.014]$ & 0.10 & 0.07 \\
+Strong gain shift ($+1.5$ log-power) & $+0.119$ $[+0.071,+0.167]$ & 0.29 & 0.19 & $+0.040$ $[-0.005,+0.083]$ & 0.27 & 0.16 \\
+STFT window 512 samples instead of 256 & $+0.053$ $[+0.024,+0.082]$ & 0.18 & 0.11 & $+0.142$ $[+0.083,+0.201]$ & 0.30 & 0.19 \\
+\bottomrule
+\end{tabular}
+\end{table*}
+Table~\ref{tab:robust} reports the prespecified conditions. Both models are insensitive to the additional contiguous time mask and to the mild gain shift. The candidate degrades three times more than the comparator under a strong amplitude shift, whereas the pretrained network degrades nearly three times more under a change of STFT resolution (256 to 512 samples), with 30\% of its argmax labels flipping. The second finding is the pattern the preprocessing-reliability literature predicts \cite{hou2026samebrain}: features transferred from natural images are tuned to a particular rendering of the spectrogram.
+
+\subsection{Evidence-use audit}
+\begin{figure*}[t]
+\centering
+\includegraphics[width=0.9\textwidth]{figures/v18_evidence_deletion.png}
+\caption{Evidence-use audit of the frozen candidate (seed 101). (a) View and region deletion on the full test. (b,c) Saliency-ranked versus random deletion of local (region, time-bin) blocks on 48 prespecified cases.}
+\label{fig:evidence}
+\end{figure*}
+Deleting the raw-EEG local view raises the candidate's calibrated patient-mean KL by $+0.408$ $\ci{+0.35}{+0.47}$ and flips 31.5\% of labels; deleting the 10-minute context raises it by $+0.090$ $\ci{+0.06}{+0.13}$ (Figure~\ref{fig:evidence}). Region removal costs $+0.10$ (LL), $+0.12$ (RL), $+0.20$ (LP) and $+0.07$ (RP). Deleting local blocks in the order of $|\nabla_x \odot x|$ raises KL faster than a random order at every fraction (0.91 versus 0.87 at 10\%, 1.08 versus 1.01 at 30\%, 1.26 versus 1.17 at 90\%). The model uses the evidence its design claims to use, and its importance ranking is informative rather than decorative; neither fact makes it accurate.
+
+\subsection{Resources and latency}
+\begin{figure*}[t]
+\centering
+\begin{subfigure}[t]{0.48\textwidth}
+\includegraphics[width=\linewidth]{figures/v08_learning_curves.png}
+\caption{Learning curves and completed exposure.}
+\end{subfigure}\hfill
+\begin{subfigure}[t]{0.48\textwidth}
+\includegraphics[width=\linewidth]{figures/v20_accuracy_resource_pareto.png}
+\caption{Patient KL versus measured latency.}
+\end{subfigure}
+\caption{Training exposure and the accuracy--resource trade-off. Every run completed its declared schedule; the pretrained comparator is both more accurate and faster at batch 32, while the compact model wins only at batch 1.}
+\label{fig:resources}
+\end{figure*}
+The whole study consumed 0.722 GPU-hours in 17 jobs with no failures: 0.171\,h for baselines, 0.362\,h for ablations and pilots, 0.188\,h for the nine final fits. A final fit takes 1.11\,min (P) or 0.98\,min (B3) on the GB10 with a peak CUDA allocation of 0.44\,GiB and a process resident set of 7.6\,GiB (Figure~\ref{fig:resources}). Cached-tensor inference has median latency 1.36\,ms at batch 1 and 2.62\,ms at batch 32 (12,200 windows/s) for P, and 1.50\,ms and 1.87\,ms (17,100 windows/s) for B3, whose fused kernels win at larger batches despite nine times more parameters. Raw Parquet-to-prediction latency is about 45\,ms per window for both models and is dominated by I/O and the STFT. Energy was not measured because no credible power boundary exists on the unified-memory system.
+
+\section{Implementation and Reproducibility}
+\label{sec:impl}
+The study is engineered so that a reviewer can rebuild every number from the public release and an authorised copy of the source data. \textbf{Cache conversion} groups label windows by recording, reads each Parquet file once, writes float16 values and packed masks into pre-allocated memory-mapped shards of 2,048 rows through \texttt{.partial} files that are renamed atomically only after both views exist for every row, and checksums each shard into a manifest. Sixteen worker processes converted all 106,800 rows in 786\,s; pinning BLAS to one thread per worker was necessary, because the default multi-threaded matrix products made the context pass two orders of magnitude slower. \textbf{Training} uses a supervisor that samples CUDA allocation, process-tree resident memory and system availability every fifty steps and aborts with an \texttt{INCOMPLETE} status at declared stops (12\,GiB, 32\,GiB, 32\,GiB free); a \texttt{flock}-based GPU lock forbids concurrent jobs, and every job appends its wall time to the ledger whether it passed or failed. \textbf{Roles} are enforced in code: a development-role loader raises on any request for the test partition, and the evaluator role logs each test access against the protocol hash. \textbf{Release} is an allowlisted export with identifier and secret scans of the working tree and of every reachable Git object; notebooks are published with aggregate-only outputs, per-row predictions and weights stay private, and public tables suppress cells with fewer than ten patients. The repository ships 155 synthetic CPU tests (contracts, alignment, spectral encoders, splits, cache round trip, model, losses, engine, metrics, bootstrap, calibration, figures), seven executed notebooks and twenty figures whose sidecars record the hashes and run identifiers they were drawn from.
+
+\section{Discussion}
+\textbf{Why the compact candidate lost.} Three observations explain the result. First, the task is patient-limited: 1,170 training patients contribute 64k highly correlated windows, and every architecture overfits after two or three epochs. Under the frozen short schedule the candidate ties the comparator on tune but not on the larger locked test, and its seed spread is 60\% larger. Second, ImageNet features transfer well to the upsampled four-channel log-spectrogram image; the comparator's advantage is largest exactly where the evidence is clearest (unanimous or heavily annotated windows, LPD), which is where transferred texture detectors help most. Third, the three mechanisms address problems the data do not pose: 32 uniform bins over 50\,s already resolve the 10-second centre, the two views mostly agree so the gate re-weights similar distributions, and the disagreement target is too noisy (Spearman 0.3) to regularise the classifier. The economical multi-scale block simply adds capacity that overfits faster.
+
+\textbf{What the candidate is good for.} It is nine times smaller, has lower batch-1 latency, is statistically indistinguishable from the comparator on the most ambiguous windows and on LRDA, and is markedly more stable to a change of spectral preprocessing. For a bedside system whose acquisition pipeline may drift, that last property is a systems argument in its favour that the headline KL hides.
+
+\textbf{Implications for next-generation clinical computing.} The study is an existence proof that a complete, auditable evaluation of an EEG model---leak-free split, byte-capped evidence, locked protocol, calibration, deferral, corruption suite, evidence deletion, latency---fits in under one GPU-hour on a single desktop accelerator. Pre-registration cost nothing in compute and prevented the two most common ways a positive result could have been manufactured here: choosing the comparator or the epoch after seeing the test set, and reporting the seed that happened to win. The same machinery supports model governance: hashes bind every table and figure to a split, a cache and a protocol; per-row artefacts never leave the private tier; and the release contains no patient data, no identifiers and no weights.
+
+\textbf{Threats to validity.} The comparator was selected on tune from only two candidates, so a stronger small pretrained network might widen the gap further, not narrow it. The mechanism ablations are single-seed pilots whose effects are smaller than the seed spread observed in the final phase, which is why they are reported without intervals and why no mechanism claim is made in either direction. Temperature scaling and referral thresholds were fitted on partitions of 95 and 98 patients, so the calibration figures have wide bands. Finally, the test partition was read once, but the pipeline bug fixed between the first and second evaluation attempts (a renamed dictionary key) occurred before any metric was computed and is recorded in the test-access log.
+
+\textbf{Design guidance for practitioners.} Five lessons generalise beyond this dataset. (1) Cap and count the evidence: a byte budget that includes validity masks and metadata makes ``compact'' a measurable property rather than a parameter count, and it made the uniform and foveated encodings exactly comparable. (2) Freeze the schedule, not the checkpoint: when every model peaks within three epochs, selecting checkpoints on a tuning set overstates what a complete refit will deliver, and a short annealed schedule recovered 0.056 KL for the candidate. (3) Choose the comparator on data, not on convenience: the smallest pretrained network available was stronger than every compact design and would have been the wrong control to omit. (4) Calibrate on a partition that never trains weights and report the temperature: values of 1.2--1.4 are a diagnostic of soft-label over-confidence that the KL alone hides. (5) Audit evidence by deletion and preprocessing by perturbation; the two audits disagreed about which model is safer, and a deployment decision needs both.
+
+\textbf{Data governance.} The release contains no EEG samples, spectrogram values, identifiers, split membership tables, per-window predictions or trained weights; each is reconstructible by an authorised holder of the source data from the published hashes and code. Public tables suppress any cell with fewer than ten patients, and the executed notebooks were scanned for identifiers before export. Secret scanning of the working tree and of every reachable Git object ran before the repository was pushed. These are data-minimisation measures, not an anonymisation guarantee, and the source data remain under the competition's terms.
+
+\textbf{Limitations.} Single dataset and site; segment labels only, so no event-level sensitivity, onset latency or false alarms per hour; the disagreement statistic assumes exchangeable annotators; the corruption conditions are representation-level perturbations, not validated artefact simulators; single-annotator windows have unavoidably noisy targets; the mechanism ablations are single-seed pilots; and weights are withheld pending a rights review. The natural next hypotheses within the same protocol are patient-level regularisation (fewer correlated windows per patient per epoch) and self-supervised pre-training of the compact trunk on the unlabelled portions of the 17,300 recordings; both would be new named configurations under a new lock.
+
+\section{Conclusion}
+We asked whether byte-matched temporal foveation, a learned view gate and an annotation-disagreement auxiliary target let a 164k-parameter model match a small pretrained CNN on expert-vote EEG classification, and we specified how the question would be answered before touching the data. The answer is no: the candidate is inferior by 0.066 patient-mean KL with an interval wholly above zero, and none of the mechanisms helps in matched ablations. The audits nevertheless yield transferable findings---over-confidence that temperature scaling repairs, entropy-based deferral that lowers accepted-case risk, evidence use that survives deletion tests, and a pretrained network that is three times more fragile to spectral preprocessing than the compact one---and the protocol yields a cheap, reproducible benchmark for the next attempt. Code, tests, executed notebooks, twenty provenance-tracked figures and every aggregate table are available at \repourl.
+
+\bibliographystyle{ACM-Reference-Format}
+\bibliography{refs}
+
+\appendix
+\section{Prespecified Subgroup Estimates}
+\noindent\begin{minipage}{\columnwidth}
+\captionof{table}{Paired calibrated difference in patient-mean KL (P $-$ B3, three seeds) within the sixteen strata frozen before the test. Positive favours the comparator. Strata with fewer than 30 patients are low-support.}
+\label{tab:strata}
+\footnotesize
+\centering
+\setlength{\tabcolsep}{3.5pt}
+\begin{tabular}{lrrrrl}
+\toprule
+Stratum & Rows & Patients & KL P & KL B3 & $\Delta$ [95\% CI] \\
+\midrule
+1 vote & 510 & 28 & 0.939 & 0.817 & $+0.123$ $[-0.032,+0.289]$\,$^{\dagger}$ \\
+2--4 votes & 11,990 & 353 & 1.057 & 1.000 & $+0.057$ $[+0.013,+0.099]$ \\
+5--9 votes & 315 & 56 & 0.491 & 0.473 & $+0.018$ $[-0.043,+0.074]$ \\
+$\ge$10 votes & 8,490 & 239 & 0.744 & 0.666 & $+0.079$ $[+0.027,+0.129]$ \\
+Entropy zero (unanimous) & 10,877 & 357 & 1.046 & 0.973 & $+0.073$ $[+0.028,+0.116]$ \\
+Entropy middle tertile & 2,380 & 168 & 0.736 & 0.643 & $+0.094$ $[+0.051,+0.141]$ \\
+Entropy upper tertile & 8,048 & 250 & 0.815 & 0.796 & $+0.019$ $[-0.033,+0.071]$ \\
+Valid cells $<$ 95\% & 1,523 & 134 & 1.036 & 0.917 & $+0.119$ $[+0.029,+0.206]$ \\
+Valid cells $\ge$ 95\% & 19,782 & 381 & 0.917 & 0.853 & $+0.064$ $[+0.030,+0.096]$ \\
+Majority Seizure & 4,363 & 191 & 0.983 & 0.928 & $+0.056$ $[-0.007,+0.114]$ \\
+Majority LPD & 2,485 & 52 & 1.171 & 0.992 & $+0.179$ $[+0.046,+0.308]$ \\
+Majority GPD & 3,143 & 65 & 0.983 & 0.901 & $+0.082$ $[-0.062,+0.235]$ \\
+Majority LRDA & 3,137 & 93 & 1.580 & 1.609 & $-0.028$ $[-0.154,+0.093]$ \\
+Majority GRDA & 3,608 & 140 & 0.979 & 0.940 & $+0.039$ $[-0.030,+0.108]$ \\
+Majority Other & 3,746 & 239 & 0.777 & 0.709 & $+0.068$ $[+0.024,+0.108]$ \\
+Tied majority & 823 & 97 & 0.760 & 0.718 & $+0.042$ $[-0.021,+0.106]$ \\
+\bottomrule
+\multicolumn{6}{l}{$^{\dagger}$ low support (28 patients).}
+\end{tabular}
+\end{minipage}
+
+\end{document}
