@@ -61,6 +61,10 @@ The reading for a conference paper: with a fair, byte-matched and leak-free prot
 
 Every model overfits patient-specific structure after two or three epochs, so the two allowed *common shorter schedule* pilots (configurations 7 and 8 of the eight permitted) were run and the 3-epoch complete schedule was frozen for the final refits on train+tune. On tune the two methods tie under that schedule; on the locked test they do not.
 
+## Full evaluation report
+
+All metrics, subgroup, robustness, evidence, resource tables and the rubric rating are in [`EVALUATION_REPORT.md`](EVALUATION_REPORT.md).
+
 ## Repository map
 
 ```

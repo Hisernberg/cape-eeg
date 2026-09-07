@@ -9,7 +9,7 @@ from pathlib import Path
 
 from ..contracts import stable_hash, file_sha256
 
-ALLOWED_TOP = ["README.md", "AGENTS.md", "CODEX_EXECUTION.md", "CITATION.cff", "LICENSE", "DATA_ACCESS.md", "MODEL_CARD.md", "REPRODUCIBILITY.md",
+ALLOWED_TOP = ["README.md", "EVALUATION_REPORT.md", "AGENTS.md", "CODEX_EXECUTION.md", "CITATION.cff", "LICENSE", "DATA_ACCESS.md", "MODEL_CARD.md", "REPRODUCIBILITY.md",
                "pyproject.toml", ".gitignore", "configs", "src", "scripts", "tests", "notebooks", "docs", "refs", "results/aggregate", "figures", ".github"]
 ALLOWED_EXT = {".py", ".sh", ".md", ".yaml", ".yml", ".toml", ".cff", ".txt", ".json", ".csv", ".ipynb", ".png", ".svg", ".gitignore", ".cfg", ".ini", ""}
 FORBIDDEN_NAMES = {"train.csv", "test.csv", "sample_submission.csv"}
